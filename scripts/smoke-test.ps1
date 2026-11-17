@@ -16,13 +16,15 @@ $checks = @(
     @{ a = "144"; b = "12"; op = "divide"; expected = "12" }
 )
 
+$symbols = @{ add = "+"; subtract = "-"; multiply = "*"; divide = "/" }
+
 foreach ($check in $checks) {
     $body = @{ a = $check.a; b = $check.b; op = $check.op }
     $result = Invoke-RestMethod -Uri "$BaseUrl/api/calculate" -Method Post -Body $body -TimeoutSec 20
     if ($result.result -ne $check.expected) {
         throw "$($check.op) failed: expected $($check.expected), got $($result.result)"
     }
-    Write-Host "    PASS $($result.expression) [$($result.servedBy)]" -ForegroundColor Gray
+    Write-Host "    PASS $($check.a) $($symbols[$check.op]) $($check.b) = $($result.result) [$($result.servedBy)]" -ForegroundColor Gray
 }
 
 $history = Invoke-RestMethod -Uri "$BaseUrl/api/history" -Method Get -TimeoutSec 20
