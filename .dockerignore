@@ -1,0 +1,9 @@
+.git
+.github
+build
+docs
+k8s
+scripts
+.jenkins
+*.md
+*.docx

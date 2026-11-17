@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arithmetic
+  labels:
+    app.kubernetes.io/name: arithmetic-operations
+    app.kubernetes.io/part-of: devops-lab
