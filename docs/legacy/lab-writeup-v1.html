@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lab 04 â€” Arithmetic Operations | DevOps Laboratory</title>
-<meta name="description" content="External lab record for Question 4 â€” Arithmetic Operations: Java, Git, Jenkins, Docker and Kubernetes.">
+<title>Lab 04 — Arithmetic Operations | DevOps Laboratory</title>
+<meta name="description" content="External lab record for Question 4 — Arithmetic Operations: Java, Git, Jenkins, Docker and Kubernetes.">
 <style>
 /* ------------------------------------------------------------------
    Self-hosted type
@@ -925,7 +925,7 @@ figure.shot figcaption .cap-title { color: var(--ink); text-transform: none; let
   <div class="shell header-grid">
     <span class="mono">SET-no: 04</span>
     <span class="mono header-center">Arithmetic Operations / Lab Record</span>
-    <span class="mono">DevOps Laboratory Â· 2026</span>
+    <span class="mono">DevOps Laboratory · 2026</span>
   </div>
 </header>
 
@@ -937,15 +937,15 @@ figure.shot figcaption .cap-title { color: var(--ink); text-transform: none; let
   ============================================================= -->
   <section class="hero" aria-labelledby="hero-title">
     <div>
-      <p class="eyebrow">Experiment 04 â€” DevOps laboratory</p>
+      <p class="eyebrow">Experiment 04 — DevOps laboratory</p>
       <h1 id="hero-title">Arithmetic<br><em>operations.</em></h1>
     </div>
     <div class="hero-side">
       <p class="hero-note">A precise Java calculator, delivered from a Git commit to a running Kubernetes service.</p>
       <dl class="hero-meta">
-        <div><dt>Question</dt><dd>04 â€” Arithmetic Operations</dd></div>
-        <div><dt>Set</dt><dd>SET â€” 04</dd></div>
-        <div><dt>Session</dt><dd>2026â€“27</dd></div>
+        <div><dt>Question</dt><dd>04 — Arithmetic Operations</dd></div>
+        <div><dt>Set</dt><dd>SET — 04</dd></div>
+        <div><dt>Session</dt><dd>2026–27</dd></div>
         <div><dt>Record</dt><dd>External laboratory</dd></div>
       </dl>
     </div>
@@ -961,7 +961,7 @@ figure.shot figcaption .cap-title { color: var(--ink); text-transform: none; let
         <p class="aim-text">To write a Java program that performs <strong>addition, subtraction, multiplication and division</strong>, upload it to GitHub using Git, configure a Jenkins job to build and execute it, create a Docker image, and deploy the containerised service to Kubernetes.</p>
         <div class="question">
           <span class="mono">Question 04</span>
-          <p>Arithmetic Operations â€” implement the four operations, publish the program, run it through Jenkins, package it with Docker, and expose it through Kubernetes.</p>
+          <p>Arithmetic Operations — implement the four operations, publish the program, run it through Jenkins, package it with Docker, and expose it through Kubernetes.</p>
         </div>
       </div>
     </div>
@@ -972,7 +972,7 @@ figure.shot figcaption .cap-title { color: var(--ink); text-transform: none; let
   ============================================================= -->
   <section class="proof" aria-label="Result at a glance">
     <div><strong>11/11</strong><span>Calculator tests passed</span></div>
-    <div><strong>#2</strong><span>Jenkins build Â· success</span></div>
+    <div><strong>#2</strong><span>Jenkins build · success</span></div>
     <div><strong>2/2</strong><span>Kubernetes pods ready</span></div>
     <div><strong>4/4</strong><span>Live smoke checks passed</span></div>
   </section>
@@ -1006,15 +1006,15 @@ figure.shot figcaption .cap-title { color: var(--ink); text-transform: none; let
 
     <div class="arch" aria-label="Delivery architecture from source to running service">
       <div class="arch-node"><span class="arch-no">01 / Source</span><strong>GitHub</strong><span>main branch<br>public repository</span></div>
-      <div class="arch-node"><span class="arch-no">02 / Build</span><strong>Jenkins</strong><span>compile Â· 11 tests<br>image build</span></div>
+      <div class="arch-node"><span class="arch-no">02 / Build</span><strong>Jenkins</strong><span>compile · 11 tests<br>image build</span></div>
       <div class="arch-node"><span class="arch-no">03 / Package</span><strong>Docker</strong><span>multi-stage<br>non-root runtime</span></div>
-      <div class="arch-node"><span class="arch-no">04 / Orchestrate</span><strong>Kubernetes</strong><span>2 pods Â· probes<br>rolling update</span></div>
+      <div class="arch-node"><span class="arch-no">04 / Orchestrate</span><strong>Kubernetes</strong><span>2 pods · probes<br>rolling update</span></div>
       <div class="arch-node"><span class="arch-no">05 / Serve</span><strong>Browser</strong><span>localhost:30081<br>browser console</span></div>
     </div>
 
     <div class="request-path" aria-label="Request path">
-      <b>Browser</b><span class="arrow">â†’</span><b>NodePort 30081</b><span class="arrow">â†’</span><b>Service</b><span class="arrow">â†’</span><b>Pod A / Pod B</b>
-      <span>Â·</span><span>health probes on <b>/api/health</b></span>
+      <b>Browser</b><span class="arrow">→</span><b>NodePort 30081</b><span class="arrow">→</span><b>Service</b><span class="arrow">→</span><b>Pod A / Pod B</b>
+      <span>·</span><span>health probes on <b>/api/health</b></span>
     </div>
 
     <p class="note"><span class="mono">Design note</span>The interface never performs arithmetic in JavaScript. Every answer is a request to the Java API, and the Runtime panel reports the replica that served it. That single design choice makes Docker and Kubernetes visible during the demo.</p>
@@ -1072,17 +1072,17 @@ kind v0.33.0 go1.26.7 windows/amd64</code></pre>
         <div class="block code">
           <div class="block-head"><span>Project tree</span><span class="file">Arithmetic-Operations/</span></div>
           <pre><code>Arithmetic-Operations/
-â”œâ”€â”€ src/main/java/com/arithmetic/
-â”‚   â”œâ”€â”€ Calculator.java          arithmetic core and validation
-â”‚   â””â”€â”€ App.java                 HTTP server, API and static files
-â”œâ”€â”€ src/main/resources/static/   index.html Â· styles.css Â· app.js Â· fonts
-â”œâ”€â”€ src/test/java/com/arithmetic/CalculatorTest.java
-â”œâ”€â”€ k8s/                         namespace Â· deployment Â· service Â· kind config
-â”œâ”€â”€ scripts/                     build Â· test Â· run Â· deploy Â· smoke test
-â”œâ”€â”€ docs/                        writeup Â· runbook Â· screenshots
-â”œâ”€â”€ Dockerfile
-â”œâ”€â”€ Jenkinsfile
-â””â”€â”€ README.md</code></pre>
+├── src/main/java/com/arithmetic/
+│   ├── Calculator.java          arithmetic core and validation
+│   └── App.java                 HTTP server, API and static files
+├── src/main/resources/static/   index.html · styles.css · app.js · fonts
+├── src/test/java/com/arithmetic/CalculatorTest.java
+├── k8s/                         namespace · deployment · service · kind config
+├── scripts/                     build · test · run · deploy · smoke test
+├── docs/                        writeup · runbook · screenshots
+├── Dockerfile
+├── Jenkinsfile
+└── README.md</code></pre>
         </div>
       </div>
     </div>
@@ -1144,7 +1144,7 @@ public static Result calculate(BigDecimal a, BigDecimal b, Operation operation) 
         <h3>Compile, test and run locally</h3>
         <p>The scripts locate a complete JDK, compile the sources, copy the static assets, package an executable jar and run the zero-dependency test suite.</p>
         <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">build Â· test Â· run</span></div>
+          <div class="block-head"><span>PowerShell</span><span class="file">build · test · run</span></div>
           <pre><code><span class="prompt">PS&gt;</span> powershell -ExecutionPolicy Bypass -File scripts\build.ps1
 <span class="prompt">PS&gt;</span> powershell -ExecutionPolicy Bypass -File scripts\test.ps1
 <span class="prompt">PS&gt;</span> powershell -ExecutionPolicy Bypass -File scripts\run.ps1</code></pre>
@@ -1175,7 +1175,7 @@ PASS  operation aliases work for the API
         <p>Open <span class="mono">http://localhost:8080</span>. The service prints its instance name and health URL at startup. The UI starts with <span class="mono">128 + 64</span>; every calculation is sent to the Java API.</p>
         <figure class="shot">
           <img src="screenshots/app-home.png" alt="Arithmetic Operations console running locally in Docker, showing the four operations, a clean tape and the runtime panel.">
-          <figcaption><span class="cap-title">Local run â€” Docker on port 8081</span><span>Figure 01</span></figcaption>
+          <figcaption><span class="cap-title">Local run — Docker on port 8081</span><span>Figure 01</span></figcaption>
         </figure>
       </div>
     </div>
@@ -1186,7 +1186,7 @@ PASS  operation aliases work for the API
         <h3>Create the GitHub repository</h3>
         <ol>
           <li>Open <a href="https://github.com">github.com</a> and sign in.</li>
-          <li>Click <strong>+</strong> â†’ <strong>New repository</strong>.</li>
+          <li>Click <strong>+</strong> → <strong>New repository</strong>.</li>
           <li>Name the repository <span class="mono">Arithmetic-Operations</span>.</li>
           <li>Select <strong>Public</strong> and click <strong>Create repository</strong>.</li>
           <li>Do not add a README on GitHub; the local project already contains one.</li>
@@ -1230,7 +1230,7 @@ origin  https://github.com/Ksiri03/Arithmetic-Operations.git (push)
         <p>Open the repository in a browser. The source folders, <span class="mono">Dockerfile</span>, <span class="mono">Jenkinsfile</span>, Kubernetes manifests and documentation should all be present.</p>
         <figure class="shot">
           <img src="screenshots/github-repo.png" alt="Public GitHub repository Ksiri03/Arithmetic-Operations with source folders, Dockerfile, Jenkinsfile and README.">
-          <figcaption><span class="cap-title">Public repository â€” two commits on main</span><span>Figure 02</span></figcaption>
+          <figcaption><span class="cap-title">Public repository — two commits on main</span><span>Figure 02</span></figcaption>
         </figure>
       </div>
     </div>
@@ -1280,9 +1280,9 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]</code></pre>
         </div>
         <ul>
-          <li><strong>Build stage</strong> â€” JDK 21 Alpine, compiles with <span class="mono">--release 17</span>, copies static assets, creates an executable jar.</li>
-          <li><strong>Runtime stage</strong> â€” JRE 21 Alpine, no compiler and no source code in the final image.</li>
-          <li><strong>Non-root</strong> â€” runs as UID/GID 10001. Kubernetes adds a read-only root filesystem and drops all Linux capabilities.</li>
+          <li><strong>Build stage</strong> — JDK 21 Alpine, compiles with <span class="mono">--release 17</span>, copies static assets, creates an executable jar.</li>
+          <li><strong>Runtime stage</strong> — JRE 21 Alpine, no compiler and no source code in the final image.</li>
+          <li><strong>Non-root</strong> — runs as UID/GID 10001. Kubernetes adds a read-only root filesystem and drops all Linux capabilities.</li>
         </ul>
       </div>
     </div>
@@ -1334,7 +1334,7 @@ arithmetic-ops   1.0.0   af7ec66b6b77   287MB
         <div class="block term">
           <div class="block-head"><span>Output</span><span class="file">API response, trimmed</span></div>
           <pre><code>{"a":"12","b":"8","operation":"multiply","label":"Multiplication",
- "symbol":"Ã—","result":"96","expression":"12 Ã— 8 = 96",
+ "symbol":"×","result":"96","expression":"12 × 8 = 96",
  "servedBy":"783adb7fdb2b","at":"2026-11-17T17:47:36Z"}</code></pre>
         </div>
         <p>The <span class="mono">servedBy</span> value is the container ID when running under Docker, and the pod name when running under Kubernetes. That is how the runtime panel proves where the answer came from.</p>
@@ -1358,10 +1358,10 @@ arithmetic-ops   1.0.0   af7ec66b6b77   287MB
         </div>
         <p>Open <span class="mono">http://localhost:8080</span>. Retrieve the initial administrator password from <span class="mono">JENKINS_HOME\secrets\initialAdminPassword</span>, install the suggested plugins and create the administrator account.</p>
         <ul>
-          <li><strong>Git</strong> â€” clone the repository.</li>
-          <li><strong>Pipeline</strong> â€” run the declarative Jenkinsfile.</li>
-          <li><strong>Timestamper</strong> â€” timestamp every console line.</li>
-          <li><strong>Build tools on PATH</strong> â€” <span class="mono">java</span>, <span class="mono">javac</span>, <span class="mono">jar</span>, <span class="mono">git</span>, <span class="mono">docker</span>, <span class="mono">kind</span>, <span class="mono">kubectl</span>, <span class="mono">powershell</span>.</li>
+          <li><strong>Git</strong> — clone the repository.</li>
+          <li><strong>Pipeline</strong> — run the declarative Jenkinsfile.</li>
+          <li><strong>Timestamper</strong> — timestamp every console line.</li>
+          <li><strong>Build tools on PATH</strong> — <span class="mono">java</span>, <span class="mono">javac</span>, <span class="mono">jar</span>, <span class="mono">git</span>, <span class="mono">docker</span>, <span class="mono">kind</span>, <span class="mono">kubectl</span>, <span class="mono">powershell</span>.</li>
         </ul>
       </div>
     </div>
@@ -1372,7 +1372,7 @@ arithmetic-ops   1.0.0   af7ec66b6b77   287MB
         <h3>Create the Jenkins job</h3>
         <p>The recorded job is a <strong>Pipeline</strong> job named <span class="mono">Arithmetic-Operations</span>. The reference-style Freestyle equivalent is included in Appendix B and in <span class="mono">docs/JENKINS.md</span>; the commands are the same.</p>
         <ol>
-          <li>Open the Jenkins dashboard â†’ <strong>New Item</strong>.</li>
+          <li>Open the Jenkins dashboard → <strong>New Item</strong>.</li>
           <li>Enter <span class="mono">Arithmetic-Operations</span>.</li>
           <li>Select <strong>Pipeline</strong> and click <strong>OK</strong>.</li>
           <li>Under <strong>Pipeline</strong>, choose <strong>Pipeline script from SCM</strong>.</li>
@@ -1381,7 +1381,7 @@ arithmetic-ops   1.0.0   af7ec66b6b77   287MB
         </ol>
         <figure class="shot">
           <img src="screenshots/jenkins-job.png" alt="Jenkins job Arithmetic-Operations showing build 2 successful, artifact and permalinks.">
-          <figcaption><span class="cap-title">Jenkins job â€” two successful builds</span><span>Figure 03</span></figcaption>
+          <figcaption><span class="cap-title">Jenkins job — two successful builds</span><span>Figure 03</span></figcaption>
         </figure>
       </div>
     </div>
@@ -1397,7 +1397,7 @@ arithmetic-ops   1.0.0   af7ec66b6b77   287MB
               <tr><td>Source Code Management</td><td>Git</td></tr>
               <tr><td>Repository URL</td><td class="mono">https://github.com/Ksiri03/Arithmetic-Operations.git</td></tr>
               <tr><td>Branch Specifier</td><td class="mono">*/main</td></tr>
-              <tr><td>Credentials</td><td>None â€” the repository is public</td></tr>
+              <tr><td>Credentials</td><td>None — the repository is public</td></tr>
               <tr><td>Script Path</td><td class="mono">Jenkinsfile</td></tr>
               <tr><td>Build Trigger</td><td>Manual for the demonstration</td></tr>
             </tbody>
@@ -1419,7 +1419,7 @@ arithmetic-ops   1.0.0   af7ec66b6b77   287MB
               <tr><td><strong>Checkout</strong></td><td class="mono">checkout scm</td><td>Commit hash and message</td></tr>
               <tr><td><strong>Compile and test</strong></td><td class="mono">scripts\test.ps1</td><td>11 tests passed</td></tr>
               <tr><td><strong>Build Docker image</strong></td><td class="mono">docker build -t arithmetic-ops:build-2 .</td><td>Image ID and size</td></tr>
-              <tr><td><strong>Load into kind</strong></td><td class="mono">kind load docker-image â€¦</td><td>Image present on node</td></tr>
+              <tr><td><strong>Load into kind</strong></td><td class="mono">kind load docker-image …</td><td>Image present on node</td></tr>
               <tr><td><strong>Deploy</strong></td><td class="mono">kubectl apply -k k8s</td><td>Rollout complete</td></tr>
               <tr><td><strong>Smoke test</strong></td><td class="mono">scripts\smoke-test.ps1</td><td>4 operations + health + history</td></tr>
             </tbody>
@@ -1454,17 +1454,17 @@ stage('Smoke test') {
       <div class="step-rail"><span class="step-num">Step 16</span>Build</div>
       <div class="step-body">
         <h3>Execute the Jenkins job</h3>
-        <p>Click <strong>Build Now</strong> and open the new build â†’ <strong>Console Output</strong>. Build <strong>#2</strong> completed in 1 minute 1 second.</p>
+        <p>Click <strong>Build Now</strong> and open the new build → <strong>Console Output</strong>. Build <strong>#2</strong> completed in 1 minute 1 second.</p>
         <figure class="shot">
           <img src="screenshots/jenkins-build.png" alt="Jenkins build number 2 succeeded, with revision 61c88e1, artifact and duration.">
-          <figcaption><span class="cap-title">Build #2 â€” finished successfully</span><span>Figure 04</span></figcaption>
+          <figcaption><span class="cap-title">Build #2 — finished successfully</span><span>Figure 04</span></figcaption>
         </figure>
         <figure class="shot">
           <img src="screenshots/jenkins-console-tests.png" alt="Jenkins console showing compile and test stage with 11 tests passed and the start of the Docker image build.">
-          <figcaption><span class="cap-title">Console â€” 11 tests passed, Docker build begins</span><span>Figure 05</span></figcaption>
+          <figcaption><span class="cap-title">Console — 11 tests passed, Docker build begins</span><span>Figure 05</span></figcaption>
         </figure>
         <div class="block term">
-          <div class="block-head"><span>Console output</span><span class="file">build #2 Â· abridged</span></div>
+          <div class="block-head"><span>Console output</span><span class="file">build #2 · abridged</span></div>
           <pre><code>==&gt; Running calculator test suite
 ...
 <span class="ok">11 passed, 0 failed</span>
@@ -1542,7 +1542,7 @@ arithmetic-ops   1.0.0     af7ec66b6b77   287MB
         <h3>Write the Kubernetes manifests</h3>
         <p>The Deployment carries the application configuration, probes, resource requests and a restrictive security context. The Service exposes port 80 internally and maps it to a fixed NodePort.</p>
         <div class="block code">
-          <div class="block-head"><span>YAML</span><span class="file">k8s/deployment.yaml Â· excerpt</span></div>
+          <div class="block-head"><span>YAML</span><span class="file">k8s/deployment.yaml · excerpt</span></div>
           <pre><code>spec:
   replicas: 2
   strategy:
@@ -1670,7 +1670,7 @@ service/arithmetic-service   NodePort   10.96.99.132  80:30081/TCP   34m</code><
         <p>Open <span class="mono">http://localhost:30081</span>. The Runtime card shows a real pod name and the node reported by the Downward API. Perform the four operations and verify the tape.</p>
         <figure class="shot">
           <img src="screenshots/app-k8s-fold.png" alt="Arithmetic Operations running in Kubernetes, with divide selected, four results on the tape and the runtime replica and node visible.">
-          <figcaption><span class="cap-title">Live in Kubernetes â€” replica and node visible</span><span>Figure 06</span></figcaption>
+          <figcaption><span class="cap-title">Live in Kubernetes — replica and node visible</span><span>Figure 06</span></figcaption>
         </figure>
         <div class="block term">
           <div class="block-head"><span>PowerShell</span><span class="file">API + smoke test</span></div>
@@ -1716,16 +1716,16 @@ deployment "arithmetic-app" successfully rolled out</code></pre>
     </div>
 
     <div class="timeline" aria-label="Demonstration timeline">
-      <div class="timeline-row"><span class="time">0:00</span><strong>Open with the repository</strong><span>GitHub â†’ source, Dockerfile, Jenkinsfile, manifests</span></div>
+      <div class="timeline-row"><span class="time">0:00</span><strong>Open with the repository</strong><span>GitHub → source, Dockerfile, Jenkinsfile, manifests</span></div>
       <div class="timeline-row"><span class="time">0:45</span><strong>Show the live console</strong><span>Add, subtract, multiply, divide; point at the pod name</span></div>
-      <div class="timeline-row"><span class="time">2:15</span><strong>Run Jenkins â†’ Build Now</strong><span>Narrate the six stages while the console scrolls</span></div>
+      <div class="timeline-row"><span class="time">2:15</span><strong>Run Jenkins → Build Now</strong><span>Narrate the six stages while the console scrolls</span></div>
       <div class="timeline-row"><span class="time">4:30</span><strong>Prove the Docker artifact</strong><span><span class="mono">docker images</span> and a one-off container on 8081</span></div>
       <div class="timeline-row"><span class="time">6:00</span><strong>Show Kubernetes state</strong><span><span class="mono">get pods,svc</span>, rollout, probes, two replicas</span></div>
       <div class="timeline-row"><span class="time">8:00</span><strong>Re-open the app</strong><span>Refresh, calculate, show the new pod name</span></div>
       <div class="timeline-row"><span class="time">9:00</span><strong>Close and take questions</strong><span>Repository, build, image, deployment, smoke test</span></div>
     </div>
 
-    <div class="pullquote">â€œThe browser is only the interface. The Java service does the arithmetic; Kubernetes decides which replica answers.â€<span>Say this once, while pointing at the Runtime card</span></div>
+    <div class="pullquote">“The browser is only the interface. The Java service does the arithmetic; Kubernetes decides which replica answers.”<span>Say this once, while pointing at the Runtime card</span></div>
 
     <p><strong>Keep one terminal ready.</strong> These are the only commands needed during the demonstration. Everything else is already built.</p>
     <div class="block term">
@@ -1746,12 +1746,12 @@ deployment "arithmetic-app" successfully rolled out</code></pre>
       <table>
         <thead><tr><th>Stage</th><th>One sentence to say</th></tr></thead>
         <tbody>
-          <tr><td><strong>Checkout</strong></td><td>â€œJenkins clones the same commit that is visible on GitHub, so the build is reproducible.â€</td></tr>
-          <tr><td><strong>Compile and test</strong></td><td>â€œEleven tests must pass before an image is allowed to exist.â€</td></tr>
-          <tr><td><strong>Docker build</strong></td><td>â€œThe JDK stays in the build stage; the runtime image contains only the JRE and the jar.â€</td></tr>
-          <tr><td><strong>kind load</strong></td><td>â€œThe image is loaded into the cluster node because it is local and has not been pushed to a registry.â€</td></tr>
-          <tr><td><strong>Deploy</strong></td><td>â€œKubernetes performs a rolling update; maxUnavailable is zero, so one replica is always ready.â€</td></tr>
-          <tr><td><strong>Smoke test</strong></td><td>â€œThe pipeline tests the live NodePort, not a local process: four operations, health and history.â€</td></tr>
+          <tr><td><strong>Checkout</strong></td><td>“Jenkins clones the same commit that is visible on GitHub, so the build is reproducible.”</td></tr>
+          <tr><td><strong>Compile and test</strong></td><td>“Eleven tests must pass before an image is allowed to exist.”</td></tr>
+          <tr><td><strong>Docker build</strong></td><td>“The JDK stays in the build stage; the runtime image contains only the JRE and the jar.”</td></tr>
+          <tr><td><strong>kind load</strong></td><td>“The image is loaded into the cluster node because it is local and has not been pushed to a registry.”</td></tr>
+          <tr><td><strong>Deploy</strong></td><td>“Kubernetes performs a rolling update; maxUnavailable is zero, so one replica is always ready.”</td></tr>
+          <tr><td><strong>Smoke test</strong></td><td>“The pipeline tests the live NodePort, not a local process: four operations, health and history.”</td></tr>
         </tbody>
       </table>
     </div>
@@ -1802,12 +1802,12 @@ deployment "arithmetic-app" successfully rolled out</code></pre>
     <div class="gallery">
       <figure class="shot wide">
         <img src="screenshots/app-k8s.png" alt="Full Arithmetic Operations page served by Kubernetes: four operations on the tape, result 12, replica arithmetic-app-67d9cd46b5-hmfr4 and node arithmetic-lab-control-plane.">
-        <figcaption><span class="cap-title">Live service â€” four operations, clean tape, Kubernetes runtime</span><span>Figure 07 Â· localhost:30081</span></figcaption>
+        <figcaption><span class="cap-title">Live service — four operations, clean tape, Kubernetes runtime</span><span>Figure 07 · localhost:30081</span></figcaption>
       </figure>
 
       <figure class="shot wide">
         <img src="screenshots/jenkins-console-success.png" alt="Jenkins console for build 2 showing four PASS smoke tests, the deployment message and Finished: SUCCESS.">
-        <figcaption><span class="cap-title">Jenkins build #2 â€” four smoke checks and successful completion</span><span>Figure 08</span></figcaption>
+        <figcaption><span class="cap-title">Jenkins build #2 — four smoke checks and successful completion</span><span>Figure 08</span></figcaption>
       </figure>
 
       <figure class="shot">
@@ -1838,7 +1838,7 @@ deployment "arithmetic-app" successfully rolled out</code></pre>
     </div>
     <div class="result-facts">
       <div><span class="mono">Repository</span><span>github.com/Ksiri03/<br>Arithmetic-Operations</span></div>
-      <div><span class="mono">Image</span><span>arithmetic-ops:build-2<br>non-root Â· JRE 21</span></div>
+      <div><span class="mono">Image</span><span>arithmetic-ops:build-2<br>non-root · JRE 21</span></div>
       <div><span class="mono">Deployment</span><span>arithmetic-app<br>2/2 ready</span></div>
       <div><span class="mono">Service</span><span>NodePort 30081<br>localhost:30081</span></div>
     </div>
@@ -1851,8 +1851,8 @@ deployment "arithmetic-app" successfully rolled out</code></pre>
   ============================================================= -->
   <section class="appendix" id="appendix" aria-labelledby="appendix-title">
     <div class="appendix-head">
-      <h2 id="appendix-title">Appendix A â€” Command reference</h2>
-      <span class="mono">Copy Â· run Â· verify</span>
+      <h2 id="appendix-title">Appendix A — Command reference</h2>
+      <span class="mono">Copy · run · verify</span>
     </div>
 
     <div class="block term">
@@ -1894,10 +1894,10 @@ kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s</c
   ============================================================= -->
   <section class="appendix" aria-labelledby="freestyle-title">
     <div class="appendix-head">
-      <h2 id="freestyle-title">Appendix B â€” Freestyle job equivalent</h2>
+      <h2 id="freestyle-title">Appendix B — Freestyle job equivalent</h2>
       <span class="mono">Reference format</span>
     </div>
-    <p>If the lab record requires the reference-style <strong>Freestyle project</strong>, create <span class="mono">Arithmetic-Operations-Freestyle</span>, point <strong>Source Code Management â†’ Git</strong> at the repository and branch <span class="mono">*/main</span>, then add one <strong>Execute Windows batch command</strong>:</p>
+    <p>If the lab record requires the reference-style <strong>Freestyle project</strong>, create <span class="mono">Arithmetic-Operations-Freestyle</span>, point <strong>Source Code Management → Git</strong> at the repository and branch <span class="mono">*/main</span>, then add one <strong>Execute Windows batch command</strong>:</p>
     <div class="block code">
       <div class="block-head"><span>Windows batch</span><span class="file">Freestyle build step</span></div>
       <pre><code>echo ===== 1. Compile and test =====
@@ -1930,7 +1930,7 @@ kubectl -n arithmetic get pods -o wide</code></pre>
   ============================================================= -->
   <section class="appendix" aria-labelledby="evidence-title">
     <div class="appendix-head">
-      <h2 id="evidence-title">Appendix C â€” Evidence index</h2>
+      <h2 id="evidence-title">Appendix C — Evidence index</h2>
       <span class="mono">Repository files</span>
     </div>
     <div class="table-wrap">
@@ -1954,9 +1954,9 @@ kubectl -n arithmetic get pods -o wide</code></pre>
 
   <footer class="doc-footer">
     <div class="footer-grid">
-      <span>SET-no 04 Â· Arithmetic Operations</span>
-      <span>Java Â· Git Â· Jenkins Â· Docker Â· Kubernetes</span>
-      <span>DevOps Laboratory Â· 2026â€“27</span>
+      <span>SET-no 04 · Arithmetic Operations</span>
+      <span>Java · Git · Jenkins · Docker · Kubernetes</span>
+      <span>DevOps Laboratory · 2026–27</span>
     </div>
   </footer>
 </div>
@@ -1964,4 +1964,3 @@ kubectl -n arithmetic get pods -o wide</code></pre>
 </main>
 </body>
 </html>
-
