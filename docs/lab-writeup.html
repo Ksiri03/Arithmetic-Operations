@@ -1,1160 +1,549 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lab 04 — Arithmetic Operations | DevOps Laboratory</title>
-<meta name="description" content="External lab record for Question 4 — Arithmetic Operations: Java, Git, Jenkins, Docker and Kubernetes.">
-<style>
-/* ------------------------------------------------------------------
-   Self-hosted type
-------------------------------------------------------------------- */
-@font-face {
-  font-family: "Newsreader";
-  src: url("fonts/newsreader-var.woff2") format("woff2");
-  font-weight: 300 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Newsreader";
-  src: url("fonts/newsreader-italic-var.woff2") format("woff2");
-  font-weight: 300 500;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Archivo";
-  src: url("fonts/archivo-var.woff2") format("woff2");
-  font-weight: 400 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Mono";
-  src: url("fonts/plex-mono-400.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Mono";
-  src: url("fonts/plex-mono-500.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lab record for Question 4 — Arithmetic Operations. Java, Git, Jenkins, Docker and Kubernetes.">
+  <title>SET 04 — Arithmetic Operations | DevOps Laboratory</title>
+  <style>
+    :root {
+      --ink: #1f2328;
+      --muted: #57606a;
+      --line: #d0d7de;
+      --line-soft: #eaeef2;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --accent-border: #b6d4fe;
+      --green: #1a7f37;
+      --green-soft: #f0fdf4;
+      --red: #b91c1c;
+      --code: #f6f8fa;
+    }
 
-:root {
-  --paper: #f1efe9;
-  --paper-raised: #f8f6f1;
-  --paper-deep: #e8e4da;
-  --ink: #111110;
-  --ink-soft: #3d3c38;
-  --muted: #76736b;
-  --line: rgba(17, 17, 16, 0.22);
-  --line-soft: rgba(17, 17, 16, 0.12);
-  --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  --sans: "Archivo", "Segoe UI", "Helvetica Neue", sans-serif;
-  --mono: "IBM Plex Mono", "Cascadia Code", Consolas, monospace;
-  --gutter: clamp(20px, 4vw, 44px);
-  --measure: 74ch;
-}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-* { box-sizing: border-box; }
+    html {
+      font-size: 16px;
+    }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
+    body {
+      margin: 0;
+      background: #e9edf2;
+      color: var(--ink);
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      line-height: 1.55;
+    }
 
-body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.58;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+    .page {
+      width: min(920px, calc(100% - 32px));
+      margin: 32px auto;
+      padding: 52px 60px 42px;
+      background: #ffffff;
+      box-shadow: 0 2px 14px rgba(31, 35, 40, 0.09);
+    }
 
-::selection { background: var(--ink); color: var(--paper); }
+    .doc-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--ink);
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-a {
-  color: inherit;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-a:hover { text-decoration-style: dotted; }
-a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+    .doc-top .set {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
 
-img { display: block; max-width: 100%; height: auto; }
+    .doc-top .set strong {
+      margin-left: 6px;
+      font-size: 19px;
+    }
 
-p { margin: 0 0 1em; }
-p:last-child { margin-bottom: 0; }
+    .kicker {
+      margin: 20px 0 0;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
 
-.grain {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.2;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
-}
+    h1 {
+      margin: 5px 0 4px;
+      font-size: 29px;
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+    }
 
-.mono {
-  font-family: var(--mono);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.06em;
-}
+    .subtitle {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-.shell {
-  width: min(1220px, calc(100% - (var(--gutter) * 2)));
-  margin-inline: auto;
-}
+    .student-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 28px;
+      padding: 11px 0 17px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-/* ------------------------------------------------------------------
-   Masthead
-------------------------------------------------------------------- */
-.site-header {
-  border-bottom: 1px solid var(--line);
-  background: var(--paper);
-}
-.header-grid {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 20px;
-  align-items: center;
-  min-height: 56px;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-.header-grid .mono:last-child { text-align: right; }
-.header-center { color: var(--muted); }
+    .student-row span {
+      flex: 1 1 180px;
+      padding-bottom: 2px;
+      border-bottom: 1px dotted #9ca3af;
+    }
 
-.skip {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 10px 14px;
-  z-index: 200;
-}
-.skip:focus { left: 12px; top: 12px; }
+    .aim {
+      margin: 22px 0 4px;
+    }
 
-/* ------------------------------------------------------------------
-   Hero
-------------------------------------------------------------------- */
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(280px, 0.85fr);
-  gap: clamp(30px, 6vw, 90px);
-  align-items: end;
-  padding: clamp(64px, 10vw, 132px) 0 clamp(48px, 6vw, 80px);
-}
+    .aim h2,
+    .part h2,
+    .outputs h2 {
+      margin: 0 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--line);
+      font-size: 21px;
+      line-height: 1.3;
+    }
 
-.eyebrow {
-  margin: 0 0 26px;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.eyebrow::before {
-  content: "";
-  width: 34px;
-  height: 1px;
-  background: var(--ink);
-}
+    .aim h2 {
+      font-size: 19px;
+    }
 
-.hero h1 {
-  margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(70px, 11.6vw, 158px);
-  font-weight: 300;
-  font-variation-settings: "opsz" 72;
-  line-height: 0.82;
-  letter-spacing: -0.048em;
-}
-.hero h1 em {
-  display: block;
-  font-style: italic;
-  font-weight: 300;
-  color: var(--muted);
-  letter-spacing: -0.055em;
-  padding-left: 0.06em;
-}
+    .aim p {
+      margin: 0;
+      font-size: 14px;
+    }
 
-.hero-side {
-  padding-top: 18px;
-  border-top: 1px solid var(--ink);
-}
-.hero-note {
-  font-family: var(--serif);
-  font-size: clamp(21px, 2.2vw, 27px);
-  line-height: 1.22;
-  letter-spacing: -0.015em;
-  margin-bottom: 34px;
-}
-.hero-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px 24px;
-  margin: 0;
-}
-.hero-meta div { border-top: 1px solid var(--line-soft); padding-top: 9px; }
-.hero-meta dt {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 3px;
-}
-.hero-meta dd {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.35;
-}
+    .part {
+      margin-top: 28px;
+    }
 
-/* ------------------------------------------------------------------
-   Aim + question
-------------------------------------------------------------------- */
-.aim-grid {
-  display: grid;
-  grid-template-columns: 130px minmax(0, 1fr);
-  gap: clamp(20px, 4vw, 54px);
-  padding: clamp(36px, 5vw, 58px) 0;
-  border-top: 2px solid var(--ink);
-  border-bottom: 1px solid var(--line);
-}
-.rail-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding-top: 7px;
-}
-.aim-text {
-  max-width: 950px;
-  font-family: var(--serif);
-  font-size: clamp(25px, 3.2vw, 38px);
-  line-height: 1.22;
-  letter-spacing: -0.022em;
-  font-weight: 300;
-  margin: 0 0 34px;
-}
-.aim-text strong { font-weight: 400; border-bottom: 1px solid var(--ink); }
-.question {
-  display: grid;
-  grid-template-columns: 142px minmax(0, 1fr);
-  gap: 22px;
-  align-items: start;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-}
-.question .mono {
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  color: var(--muted);
-}
-.question p {
-  margin: 0;
-  max-width: 68ch;
-  font-size: 14.5px;
-  color: var(--ink-soft);
-}
+    .num {
+      display: inline-block;
+      margin-right: 10px;
+      color: var(--accent);
+    }
 
-/* ------------------------------------------------------------------
-   Proof strip
-------------------------------------------------------------------- */
-.proof {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-bottom: 1px solid var(--line);
-}
-.proof div {
-  padding: 28px 22px 26px 0;
-  border-right: 1px solid var(--line-soft);
-}
-.proof div + div { padding-left: 22px; }
-.proof div:last-child { border-right: 0; }
-.proof strong {
-  display: block;
-  font-family: var(--serif);
-  font-size: clamp(42px, 5vw, 64px);
-  font-weight: 300;
-  line-height: 0.9;
-  letter-spacing: -0.05em;
-  margin-bottom: 8px;
-}
-.proof span {
-  display: block;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  line-height: 1.5;
-}
+    .lead {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-/* ------------------------------------------------------------------
-   Contents
-------------------------------------------------------------------- */
-.contents {
-  display: grid;
-  grid-template-columns: 130px minmax(0, 1fr);
-  gap: clamp(20px, 4vw, 54px);
-  padding: clamp(44px, 6vw, 70px) 0;
-  border-bottom: 1px solid var(--line);
-}
-.toc-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 48px;
-}
-.toc-list li { border-top: 1px solid var(--line-soft); }
-.toc-list a {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: baseline;
-  padding: 14px 0 13px;
-  text-decoration: none;
-}
-.toc-list a:hover .toc-title { text-decoration: underline; text-underline-offset: 4px; }
-.toc-no {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-}
-.toc-title { font-size: 15px; }
-.toc-tag {
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+    .step {
+      margin-top: 20px;
+    }
 
-/* ------------------------------------------------------------------
-   Sections
-------------------------------------------------------------------- */
-.part {
-  padding: clamp(58px, 8vw, 104px) 0 clamp(40px, 6vw, 72px);
-  border-top: 2px solid var(--ink);
-}
-.part:first-of-type { border-top: 0; }
+    .step h3 {
+      margin: 0 0 7px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
 
-.section-head {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: clamp(20px, 4vw, 54px);
-  align-items: start;
-  margin-bottom: clamp(36px, 5vw, 58px);
-}
-.section-index {
-  font-family: var(--serif);
-  font-size: clamp(46px, 6vw, 74px);
-  font-weight: 300;
-  font-style: italic;
-  line-height: 0.8;
-  letter-spacing: -0.04em;
-  color: var(--muted);
-  margin: 0;
-}
-.section-title {
-  margin: 0 0 14px;
-  max-width: 900px;
-  font-family: var(--serif);
-  font-size: clamp(42px, 6.5vw, 82px);
-  font-weight: 300;
-  font-variation-settings: "opsz" 60;
-  line-height: 0.92;
-  letter-spacing: -0.04em;
-}
-.section-intro {
-  max-width: 68ch;
-  margin: 0;
-  font-size: 16px;
-  color: var(--ink-soft);
-}
+    p {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
 
-/* ------------------------------------------------------------------
-   Steps
-------------------------------------------------------------------- */
-.step {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: clamp(20px, 4vw, 54px);
-  padding-top: 24px;
-  margin-top: 34px;
-  border-top: 1px solid var(--line);
-}
-.step:first-of-type { margin-top: 0; }
-.step-rail {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding-top: 5px;
-}
-.step-rail .step-num {
-  display: block;
-  color: var(--ink);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  margin-bottom: 7px;
-}
-.step h3 {
-  margin: 0 0 12px;
-  font-family: var(--sans);
-  font-size: clamp(20px, 2.1vw, 25px);
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.018em;
-}
-.step h3 em {
-  font-family: var(--serif);
-  font-weight: 300;
-  font-size: 1.1em;
-}
-.step-body { min-width: 0; }
-.step-body > p,
-.step-body > ul,
-.step-body > ol { max-width: var(--measure); }
-.step-body > p { font-size: 15.5px; color: var(--ink-soft); }
-.step-body > p strong { color: var(--ink); font-weight: 500; }
+    code {
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: var(--code);
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
 
-.step-body ul, .step-body ol {
-  margin: 0 0 1.1em;
-  padding-left: 1.2em;
-}
-.step-body li { margin-bottom: 0.4em; }
-.step-body li::marker { color: var(--muted); }
-.step-body p .mono,
-.step-body li .mono,
-.appendix p .mono,
-td .mono { overflow-wrap: anywhere; }
+    pre {
+      margin: 9px 0 13px;
+      padding: 11px 13px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--code);
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre;
+    }
 
-/* ------------------------------------------------------------------
-   Code + terminal blocks
-------------------------------------------------------------------- */
-.block {
-  margin: 22px 0 28px;
-  border: 1px solid var(--line);
-  background: var(--paper-raised);
-}
-.block-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px 18px;
-  padding: 9px 13px;
-  border-bottom: 1px solid var(--line);
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.block-head .file { color: var(--ink); text-transform: none; letter-spacing: 0.04em; }
-pre {
-  margin: 0;
-  padding: 17px 18px 18px;
-  overflow-x: auto;
-  font-family: var(--mono);
-  font-size: 12.2px;
-  line-height: 1.72;
-  tab-size: 2;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-pre code { font: inherit; }
+    pre code {
+      padding: 0;
+      background: transparent;
+      font-size: inherit;
+    }
 
-.term {
-  background: var(--ink);
-  color: #eae6dc;
-  border-color: var(--ink);
-}
-.term .block-head {
-  color: #bbb6aa;
-  border-bottom-color: rgba(241, 239, 233, 0.2);
-}
-.term .block-head .file { color: #eae6dc; }
-.term .prompt { color: #8c877b; }
-.term .ok { color: #ffffff; font-weight: 500; }
-.term .dim { color: #b8b2a5; }
+    .label {
+      display: block;
+      margin: 11px 0 3px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
-.code { background: var(--paper-raised); }
+    .output {
+      margin: 9px 0 14px;
+      padding: 9px 13px;
+      border-left: 3px solid var(--green);
+      background: var(--green-soft);
+    }
 
-.note {
-  margin: 22px 0;
-  padding: 2px 0 2px 16px;
-  border-left: 2px solid var(--ink);
-  font-size: 13.5px;
-  color: var(--ink-soft);
-  max-width: 75ch;
-}
-.note .mono {
-  display: block;
-  font-size: 8.5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 4px;
-}
+    .output pre {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
 
-/* ------------------------------------------------------------------
-   Tables
-------------------------------------------------------------------- */
-.table-wrap { margin: 22px 0 28px; overflow-x: auto; border-top: 1px solid var(--ink); }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 580px;
-  font-size: 14px;
-}
-th {
-  padding: 9px 12px 9px 0;
-  text-align: left;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 400;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-  vertical-align: bottom;
-}
-td {
-  padding: 12px 12px 12px 0;
-  border-bottom: 1px solid var(--line-soft);
-  vertical-align: top;
-  line-height: 1.48;
-}
-td:last-child, th:last-child { padding-right: 0; }
-td .mono { font-size: 11.5px; letter-spacing: 0.03em; }
-td strong { font-weight: 500; }
+    .note {
+      margin: 14px 0;
+      padding: 11px 14px;
+      border: 1px solid var(--accent-border);
+      border-radius: 4px;
+      background: var(--accent-soft);
+      font-size: 13px;
+    }
 
-/* ------------------------------------------------------------------
-   Figures
-------------------------------------------------------------------- */
-figure.shot {
-  margin: 26px 0 30px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  background: var(--paper-raised);
-}
-figure.shot img { border: 1px solid var(--line-soft); }
-figure.shot figcaption {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 9px 2px 0;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-figure.shot figcaption .cap-title { color: var(--ink); text-transform: none; letter-spacing: 0.02em; }
+    .note strong {
+      color: #1e40af;
+    }
 
-.gallery {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
-  align-items: start;
-}
-.gallery figure.shot { margin: 0; }
-.gallery .wide { grid-column: 1 / -1; }
+    table {
+      width: 100%;
+      margin: 9px 0 15px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
 
-/* ------------------------------------------------------------------
-   Pull quote
-------------------------------------------------------------------- */
-.pullquote {
-  margin: clamp(34px, 5vw, 56px) 0;
-  padding: 24px 0 26px;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--line);
-  font-family: var(--serif);
-  font-size: clamp(26px, 3.5vw, 41px);
-  font-style: italic;
-  font-weight: 300;
-  line-height: 1.18;
-  letter-spacing: -0.025em;
-  max-width: 1000px;
-}
-.pullquote span {
-  display: block;
-  margin-top: 16px;
-  font-family: var(--mono);
-  font-style: normal;
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+    th,
+    td {
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
 
-.subhead {
-  margin: 42px 0 8px;
-  font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  padding-top: 18px;
-  border-top: 1px solid var(--ink);
-  max-width: 760px;
-}
+    th {
+      background: var(--code);
+      font-weight: 600;
+    }
 
-/* ------------------------------------------------------------------
-   Architecture rail
-------------------------------------------------------------------- */
-.arch {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  margin: 34px 0 0;
-  border-bottom: 1px solid var(--line);
-}
-.arch-node {
-  position: relative;
-  padding: 16px 18px 26px 0;
-  border-top: 2px solid var(--ink);
-  border-right: 1px solid var(--line-soft);
-}
-.arch-node + .arch-node { padding-left: 18px; }
-.arch-node:last-child { border-right: 0; }
-.arch-node::before {
-  content: "";
-  position: absolute;
-  top: 14px;
-  right: -3px;
-  width: 5px;
-  height: 5px;
-  background: var(--ink);
-  border-radius: 50%;
-}
-.arch-node:last-child::before { display: none; }
-.arch-no {
-  display: block;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  margin-bottom: 18px;
-}
-.arch-node strong {
-  display: block;
-  font-family: var(--serif);
-  font-size: clamp(21px, 2.3vw, 28px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  margin-bottom: 8px;
-}
-.arch-node span:last-child {
-  display: block;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.request-path {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 14px;
-  margin-top: 22px;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.request-path b {
-  color: var(--ink);
-  font-weight: 500;
-}
-.request-path .arrow { color: var(--ink); font-size: 12px; }
+    .pass {
+      color: var(--green);
+      font-weight: 700;
+    }
 
-/* ------------------------------------------------------------------
-   Demo timeline
-------------------------------------------------------------------- */
-.timeline { display: grid; gap: 0; margin: 30px 0 36px; border-top: 1px solid var(--ink); }
-.timeline-row {
-  display: grid;
-  grid-template-columns: 88px minmax(0, 1fr) minmax(180px, 0.65fr);
-  gap: 20px;
-  padding: 15px 0;
-  border-bottom: 1px solid var(--line-soft);
-  align-items: baseline;
-}
-.timeline-row .time {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-}
-.timeline-row strong { font-weight: 500; font-size: 15px; }
-.timeline-row span:last-child { font-size: 13px; color: var(--muted); }
+    .fail {
+      color: var(--red);
+      font-weight: 700;
+    }
 
-.qa-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 36px;
-  margin-top: 26px;
-  border-top: 1px solid var(--ink);
-}
-.qa { padding: 17px 0 16px; border-bottom: 1px solid var(--line-soft); }
-.qa dt { font-weight: 500; font-size: 14.5px; margin-bottom: 5px; }
-.qa dd { margin: 0; font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; }
+    .outputs {
+      margin-top: 30px;
+    }
 
-/* ------------------------------------------------------------------
-   Result band
-------------------------------------------------------------------- */
-.result-band {
-  margin-top: clamp(54px, 8vw, 90px);
-  background: var(--ink);
-  color: var(--paper);
-  padding: clamp(40px, 6vw, 66px) 0;
-}
-.result-band .shell { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr); gap: 40px; align-items: end; }
-.result-band h2 {
-  margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(46px, 7vw, 90px);
-  font-weight: 300;
-  line-height: 0.9;
-  letter-spacing: -0.04em;
-}
-.result-band h2 em { color: #b8b2a5; font-style: italic; }
-.result-band p { color: #bbb6aa; font-size: 14px; max-width: 55ch; }
-.result-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.result-facts div { border-top: 1px solid rgba(241, 239, 233, 0.3); padding-top: 8px; }
-.result-facts .mono { display: block; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: #9a9589; margin-bottom: 3px; }
-.result-facts span:last-child { font-size: 12.5px; line-height: 1.4; }
+    figure {
+      margin: 16px 0 18px;
+    }
 
-/* ------------------------------------------------------------------
-   Appendix + footer
-------------------------------------------------------------------- */
-.appendix { padding: clamp(50px, 7vw, 82px) 0; border-top: 1px solid var(--line); }
-.appendix-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 14px;
-  align-items: baseline;
-  margin-bottom: 28px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--line);
-}
-.appendix-head h2 {
-  margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(30px, 3.7vw, 46px);
-  font-weight: 300;
-  letter-spacing: -0.025em;
-}
-.appendix-head .mono { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #ffffff;
+    }
 
-.doc-footer {
-  border-top: 1px solid var(--line);
-  padding: 26px 0 40px;
-}
-.footer-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 12px 24px;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+    figcaption {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-/* ------------------------------------------------------------------
-   Responsive
-------------------------------------------------------------------- */
-@media (max-width: 900px) {
-  .hero { grid-template-columns: minmax(0, 1fr); align-items: start; }
-  .hero-side { max-width: 560px; }
-  .aim-grid, .contents, .section-head, .step { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-  .rail-label { padding-top: 0; }
-  .section-index { font-size: 42px; }
-  .question { grid-template-columns: 1fr; gap: 8px; }
-  .proof { grid-template-columns: 1fr 1fr; }
-  .proof div:nth-child(2) { border-right: 0; }
-  .proof div:nth-child(3), .proof div:nth-child(4) { border-top: 1px solid var(--line-soft); }
-  .arch { grid-template-columns: 1fr 1fr; }
-  .arch-node:nth-child(even) { border-right: 0; }
-  .arch-node:nth-child(n+3) { border-top: 1px solid var(--line); }
-  .toc-list, .qa-grid, .gallery { grid-template-columns: 1fr; }
-  .gallery .wide { grid-column: auto; }
-  .timeline-row { grid-template-columns: 72px 1fr; }
-  .timeline-row span:last-child { grid-column: 2; }
-  .result-band .shell { grid-template-columns: 1fr; align-items: start; }
-}
+    .shot-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
 
-@media (max-width: 560px) {
-  body { font-size: 15px; }
-  .header-grid { grid-template-columns: 1fr auto; }
-  .header-center { display: none; }
-  .hero h1 { font-size: clamp(58px, 17vw, 86px); }
-  .proof strong { font-size: 46px; }
-  .step-body > p { font-size: 15px; }
-  .arch { grid-template-columns: 1fr; }
-  .arch-node, .arch-node + .arch-node { padding-left: 0; border-right: 0; }
-  .arch-node + .arch-node { border-top: 1px solid var(--line); }
-  .arch-node::before { display: none; }
-  .result-facts { grid-template-columns: 1fr; }
-  .footer-grid { flex-direction: column; }
-}
+    .shot-grid figure {
+      margin: 0;
+    }
 
-/* ------------------------------------------------------------------
-   Print / A4
-------------------------------------------------------------------- */
-@media print {
-  @page { size: A4; margin: 12mm 12mm 14mm; }
+    .result-box {
+      margin: 22px 0 0;
+      padding: 15px 17px;
+      border: 1px solid var(--accent-border);
+      border-radius: 4px;
+      background: var(--accent-soft);
+    }
 
-  :root {
-    --paper: #ffffff;
-    --paper-raised: #f6f4ef;
-    --paper-deep: #ece9e1;
-  }
+    .result-box h2 {
+      margin: 0 0 7px;
+      padding: 0;
+      border: 0;
+      font-size: 18px;
+    }
 
-  html { scroll-behavior: auto; }
-  body { background: #ffffff; font-size: 9.3pt; line-height: 1.42; }
-  .grain, .skip { display: none !important; }
-  .site-header { position: static; }
-  .header-grid { min-height: 28px; font-size: 7pt; }
-  .hero { padding: 8mm 0 5mm; gap: 12mm; grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.9fr); }
-  .hero h1 { font-size: 54pt; }
-  .hero-note { font-size: 12pt; margin-bottom: 7mm; }
-  .hero-meta { gap: 4mm 6mm; }
-  .hero-meta dt { font-size: 6.5pt; }
-  .hero-meta dd { font-size: 8pt; }
-  .aim-grid { padding: 6mm 0; break-inside: avoid; }
-  .aim-text { font-size: 16pt; margin-bottom: 5mm; }
-  .question { padding-top: 3mm; gap: 4mm; }
-  .question p { font-size: 8.2pt; }
+    .result-box p {
+      margin: 0;
+      font-size: 13px;
+    }
 
-  .proof { break-before: page; break-inside: avoid; }
-  .proof div { padding: 5mm 4mm 5mm 0; }
-  .proof strong { font-size: 34pt; }
-  .proof span { font-size: 7pt; }
-  .contents { break-inside: avoid; padding: 8mm 0; }
-  .toc-list a { padding: 7px 0; }
+    .doc-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 30px;
+      padding-top: 11px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+    }
 
-  .part { break-before: page; padding: 0 0 4mm; border-top: 0; }
-  .part:first-of-type { break-before: auto; }
-  .section-head { margin-bottom: 6mm; break-inside: avoid; }
-  .section-title { font-size: 30pt; }
-  .section-index { font-size: 24pt; }
-  .section-intro { font-size: 8.6pt; }
-  .step { padding-top: 10px; margin-top: 12px; break-inside: auto; }
-  .step h3 { font-size: 11pt; margin-bottom: 5px; break-after: avoid; }
-  .step-body > p { font-size: 8.6pt; margin-bottom: 6px; }
-  .step-body ul, .step-body ol { margin-bottom: 6px; }
-  .step-body li { margin-bottom: 2px; }
-  .step-rail { font-size: 7pt; }
-  .step-rail .step-num { font-size: 8pt; margin-bottom: 3px; }
+    @media (max-width: 700px) {
+      .page {
+        width: 100%;
+        margin: 0;
+        padding: 28px 22px 32px;
+        box-shadow: none;
+      }
 
-  .block { margin: 7px 0 9px; break-inside: avoid; }
-  .block-head { padding: 5px 8px; font-size: 6.5pt; }
-  pre { font-size: 6.9pt; line-height: 1.4; padding: 8px 10px; }
-  .note { margin: 7px 0; padding-left: 10px; font-size: 8pt; break-inside: avoid; }
-  .table-wrap { margin: 8px 0 10px; }
-  th { font-size: 6.5pt; padding: 5px 7px 5px 0; }
-  td { font-size: 7.8pt; padding: 6px 7px 6px 0; }
-  tr { break-inside: avoid; }
+      .doc-top,
+      .doc-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+      }
 
-  figure.shot { padding: 4px; margin: 8px 0 9px; break-inside: avoid; }
-  figure.shot img { max-height: 132mm; width: auto; max-width: 100%; margin-inline: auto; }
-  figure.shot figcaption { font-size: 6.5pt; padding-top: 4px; }
-  .gallery { gap: 6mm; }
+      h1 {
+        font-size: 24px;
+      }
 
-  .arch { break-inside: avoid; }
-  .arch-node { padding: 4mm 3mm 5mm 0; }
-  .arch-node strong { font-size: 11pt; }
-  .arch-node span:last-child { font-size: 6.8pt; }
-  .request-path { margin-top: 4mm; font-size: 7pt; }
-  .pullquote { margin: 8mm 0; padding: 4mm 0; font-size: 18pt; break-inside: avoid; }
-  .timeline { margin: 6mm 0 7mm; }
-  .timeline-row { break-inside: avoid; padding: 6px 0; }
-  .timeline-row strong { font-size: 9pt; }
-  .timeline-row span:last-child { font-size: 8pt; }
-  .qa-grid { gap: 0 8mm; margin-top: 5mm; }
-  .qa { break-inside: avoid; padding: 7px 0; }
-  .qa dt { font-size: 8.5pt; }
-  .qa dd { font-size: 8pt; }
-  .subhead { margin: 7mm 0 4px; font-size: 9pt; padding-top: 3mm; break-after: avoid; }
+      .shot-grid {
+        grid-template-columns: 1fr;
+      }
 
-  .result-band { break-before: page; padding: 16mm 0; }
-  .result-band h2 { font-size: 36pt; }
-  .result-band p { font-size: 8.5pt; }
-  .result-facts span:last-child { font-size: 8pt; }
-  .appendix { break-before: page; padding: 0 0 4mm; }
-  .appendix-head { margin-bottom: 4mm; padding-bottom: 3mm; }
-  .appendix-head h2 { font-size: 24pt; }
-  .doc-footer { break-inside: avoid; font-size: 7pt; }
-  a { text-decoration: none; color: inherit; }
-}
-</style>
+      pre {
+        font-size: 11px;
+      }
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 16mm 15mm 17mm;
+      }
+
+      body {
+        background: #ffffff;
+      }
+
+      .page {
+        width: auto;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .doc-top {
+        border-bottom-width: 1.5px;
+      }
+
+      h1 {
+        font-size: 23pt;
+      }
+
+      .aim h2,
+      .part h2,
+      .outputs h2 {
+        font-size: 15pt;
+        break-after: avoid;
+      }
+
+      .step h3 {
+        font-size: 11pt;
+        break-after: avoid;
+      }
+
+      .step {
+        break-inside: avoid;
+      }
+
+      p {
+        font-size: 10pt;
+        orphans: 2;
+        widows: 2;
+      }
+
+      .lead,
+      .aim p {
+        font-size: 10pt;
+      }
+
+      pre {
+        font-size: 8.2pt;
+        break-inside: avoid;
+      }
+
+      .label {
+        break-after: avoid;
+      }
+
+      .output,
+      .note,
+      table,
+      figure,
+      .result-box {
+        break-inside: avoid;
+      }
+
+      .part,
+      .outputs {
+        break-before: page;
+      }
+
+      .part {
+        margin-top: 0;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      figure img {
+        border: 0.5pt solid #999999;
+      }
+
+      .doc-footer {
+        font-size: 7.5pt;
+      }
+    }
+  </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<div class="grain" aria-hidden="true"></div>
+<main class="page">
+  <header class="doc-top">
+    <span class="set">SET-no <strong>04</strong></span>
+    <span>DevOps Laboratory · 2026–27</span>
+  </header>
 
-<header class="site-header">
-  <div class="shell header-grid">
-    <span class="mono">SET-no: 04</span>
-    <span class="mono header-center">Arithmetic Operations / Lab Record</span>
-    <span class="mono">DevOps Laboratory · 2026</span>
+  <p class="kicker">External laboratory record</p>
+  <h1>Question 4 — Arithmetic Operations</h1>
+  <p class="subtitle">Java · Git · Jenkins · Docker · Kubernetes</p>
+
+  <div class="student-row">
+    <span>Name: ____________________________</span>
+    <span>Roll No: __________________</span>
+    <span>Date: __________________</span>
   </div>
-</header>
 
-<main id="main">
-<div class="shell">
-
-  <!-- ============================================================
-       HERO
-  ============================================================= -->
-  <section class="hero" aria-labelledby="hero-title">
-    <div>
-      <p class="eyebrow">Experiment 04 — DevOps laboratory</p>
-      <h1 id="hero-title">Arithmetic<br><em>operations.</em></h1>
-    </div>
-    <div class="hero-side">
-      <p class="hero-note">A precise Java calculator, delivered from a Git commit to a running Kubernetes service.</p>
-      <dl class="hero-meta">
-        <div><dt>Question</dt><dd>04 — Arithmetic Operations</dd></div>
-        <div><dt>Set</dt><dd>SET — 04</dd></div>
-        <div><dt>Session</dt><dd>2026–27</dd></div>
-        <div><dt>Record</dt><dd>External laboratory</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       AIM
-  ============================================================= -->
-  <section id="aim" aria-labelledby="aim-label">
-    <div class="aim-grid">
-      <div class="rail-label" id="aim-label">Aim</div>
-      <div>
-        <p class="aim-text">To write a Java program that performs <strong>addition, subtraction, multiplication and division</strong>, upload it to GitHub using Git, configure a Jenkins job to build and execute it, create a Docker image, and deploy the containerised service to Kubernetes.</p>
-        <div class="question">
-          <span class="mono">Question 04</span>
-          <p>Arithmetic Operations — implement the four operations, publish the program, run it through Jenkins, package it with Docker, and expose it through Kubernetes.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       PROOF STRIP
-  ============================================================= -->
-  <section class="proof" aria-label="Result at a glance">
-    <div><strong>11/11</strong><span>Calculator tests passed</span></div>
-    <div><strong>#2</strong><span>Jenkins build · success</span></div>
-    <div><strong>2/2</strong><span>Kubernetes pods ready</span></div>
-    <div><strong>4/4</strong><span>Live smoke checks passed</span></div>
-  </section>
-
-  <!-- ============================================================
-       CONTENTS
-  ============================================================= -->
-  <nav class="contents" aria-label="Contents">
-    <div class="rail-label">Contents</div>
-    <ol class="toc-list">
-      <li><a href="#part-a"><span class="toc-no">01</span><span class="toc-title">Program &amp; GitHub</span><span class="toc-tag">4(a)</span></a></li>
-      <li><a href="#part-b"><span class="toc-no">02</span><span class="toc-title">Jenkins &amp; Docker</span><span class="toc-tag">4(b)</span></a></li>
-      <li><a href="#part-c"><span class="toc-no">03</span><span class="toc-title">Kubernetes</span><span class="toc-tag">4(c)</span></a></li>
-      <li><a href="#part-d"><span class="toc-no">04</span><span class="toc-title">Faculty demonstration</span><span class="toc-tag">4(d)</span></a></li>
-      <li><a href="#outputs"><span class="toc-no">05</span><span class="toc-title">Output screens</span><span class="toc-tag">Proof</span></a></li>
-      <li><a href="#appendix"><span class="toc-no">06</span><span class="toc-title">Command reference</span><span class="toc-tag">Appendix</span></a></li>
-    </ol>
-  </nav>
-
-  <!-- ============================================================
-       SYSTEM OVERVIEW
-  ============================================================= -->
-  <section class="part" id="system" aria-labelledby="system-title">
-    <div class="section-head">
-      <p class="section-index">00</p>
-      <div>
-        <h2 class="section-title" id="system-title">One commit. Four operations.<br><em>Two replicas.</em></h2>
-        <p class="section-intro">The application is deliberately small so the delivery path is visible. A Java service owns the arithmetic and the static interface. Jenkins produces a versioned image. Kubernetes runs two copies behind a NodePort service.</p>
-      </div>
-    </div>
-
-    <div class="arch" aria-label="Delivery architecture from source to running service">
-      <div class="arch-node"><span class="arch-no">01 / Source</span><strong>GitHub</strong><span>main branch<br>public repository</span></div>
-      <div class="arch-node"><span class="arch-no">02 / Build</span><strong>Jenkins</strong><span>compile · 11 tests<br>image build</span></div>
-      <div class="arch-node"><span class="arch-no">03 / Package</span><strong>Docker</strong><span>multi-stage<br>non-root runtime</span></div>
-      <div class="arch-node"><span class="arch-no">04 / Orchestrate</span><strong>Kubernetes</strong><span>2 pods · probes<br>rolling update</span></div>
-      <div class="arch-node"><span class="arch-no">05 / Serve</span><strong>Browser</strong><span>localhost:30081<br>browser console</span></div>
-    </div>
-
-    <div class="request-path" aria-label="Request path">
-      <b>Browser</b><span class="arrow">→</span><b>NodePort 30081</b><span class="arrow">→</span><b>Service</b><span class="arrow">→</span><b>Pod A / Pod B</b>
-      <span>·</span><span>health probes on <b>/api/health</b></span>
-    </div>
-
-    <p class="note"><span class="mono">Design note</span>The interface never performs arithmetic in JavaScript. Every answer is a request to the Java API, and the Runtime panel reports the replica that served it. That single design choice makes Docker and Kubernetes visible during the demo.</p>
+  <section class="aim">
+    <h2>Aim</h2>
+    <p>To write a Java program to perform addition, subtraction, multiplication and division, upload the source code to GitHub using Git, configure a Jenkins job to build and execute the program, create a Docker image, and deploy the application to Kubernetes.</p>
   </section>
 
   <!-- ============================================================
        4(a)
   ============================================================= -->
-  <section class="part" id="part-a" aria-labelledby="part-a-title">
-    <div class="section-head">
-      <p class="section-index">4(a)</p>
-      <div>
-        <h2 class="section-title" id="part-a-title">Program &amp; GitHub</h2>
-        <p class="section-intro">From an empty folder to a public repository that Jenkins can clone. The application is written in plain Java 17-compatible source and has no external dependencies.</p>
-      </div>
-    </div>
+  <section class="part" id="part-a">
+    <h2><span class="num">4(a)</span> Write the program and upload it to GitHub</h2>
+    <p class="lead">The application is a small Java HTTP service with a browser calculator. The browser sends the two numbers to the Java API; the Java class performs the arithmetic and returns the result. The same program is then packaged and deployed in parts 4(b).</p>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 01</span>Environment</div>
-      <div class="step-body">
-        <h3>Install the toolchain and verify it</h3>
-        <p>Install a JDK, Git, Docker Desktop, <span class="mono">kubectl</span>, <span class="mono">kind</span> and Jenkins. Sign in to GitHub. Open PowerShell in the project directory and verify each tool before writing code.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">toolchain verification</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> java -version
-java version "25" 2025-09-16 LTS
+    <article class="step">
+      <h3>Step 1 — Install the required software</h3>
+      <p>Install JDK 17 or newer, Git and Visual Studio Code. Create or sign in to a GitHub account. Open PowerShell and verify Java and Git:</p>
+      <span class="label">Command</span>
+      <pre><code>&gt; java -version
+&gt; git --version</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>java version "25" 2025-09-16 LTS
 Java(TM) SE Runtime Environment (build 25+37-LTS-3491)
 Java HotSpot(TM) 64-Bit Server VM (build 25+37-LTS-3491, mixed mode, sharing)
-
-<span class="prompt">PS&gt;</span> javac -version
-javac 25
-
-<span class="prompt">PS&gt;</span> git --version
-git version 2.56.0.windows.4
-
-<span class="prompt">PS&gt;</span> docker --version
-Docker version 29.7.2, build a7dcaa6
-
-<span class="prompt">PS&gt;</span> kubectl version --client
-Client Version: v1.36.1
-Kustomize Version: v5.8.1
-
-<span class="prompt">PS&gt;</span> kind version
-kind v0.33.0 go1.26.7 windows/amd64</code></pre>
-        </div>
-        <p>The local JDK is 25, but the source is compiled with <span class="mono">--release 17</span> so the program remains compatible with Java 17 and newer. The runtime image uses Java 21.</p>
+git version 2.56.0.windows.4</pre>
       </div>
-    </div>
+      <p>The source code uses the Java 17 language level. It is compiled with <code>--release 17</code> and runs on the Java 21 runtime inside the Docker image.</p>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 02</span>Structure</div>
-      <div class="step-body">
-        <h3>Create the project folder and layout</h3>
-        <p>Create a folder named <span class="mono">Arithmetic-Operations</span> and open it in VS Code. The layout separates the arithmetic core, the HTTP service, the browser assets and the delivery files.</p>
-        <div class="block code">
-          <div class="block-head"><span>Project tree</span><span class="file">Arithmetic-Operations/</span></div>
-          <pre><code>Arithmetic-Operations/
-├── src/main/java/com/arithmetic/
-│   ├── Calculator.java          arithmetic core and validation
-│   └── App.java                 HTTP server, API and static files
-├── src/main/resources/static/   index.html · styles.css · app.js · fonts
+    <article class="step">
+      <h3>Step 2 — Create the project folder</h3>
+      <p>Create a folder named <code>Arithmetic-Operations</code> and open it in Visual Studio Code. Select <b>File → Open Folder</b> and choose the folder. The important files are:</p>
+      <pre><code>Arithmetic-Operations/
+├── src/main/java/com/arithmetic/Calculator.java
+├── src/main/java/com/arithmetic/App.java
+├── src/main/resources/static/index.html
+├── src/main/resources/static/styles.css
+├── src/main/resources/static/app.js
 ├── src/test/java/com/arithmetic/CalculatorTest.java
-├── k8s/                         namespace · deployment · service · kind config
-├── scripts/                     build · test · run · deploy · smoke test
-├── docs/                        writeup · runbook · screenshots
 ├── Dockerfile
 ├── Jenkinsfile
-└── README.md</code></pre>
-        </div>
-      </div>
-    </div>
+└── k8s/</code></pre>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 03</span>Program</div>
-      <div class="step-body">
-        <h3>Write the arithmetic service</h3>
-        <p><span class="mono">Calculator.java</span> is a pure, testable core. It uses <span class="mono">BigDecimal</span> rather than <span class="mono">double</span>, rejects division by zero, normalises trailing zeros and accepts operation aliases such as <span class="mono">+</span>, <span class="mono">-</span>, <span class="mono">*</span> and <span class="mono">/</span>.</p>
-        <div class="block code">
-          <div class="block-head"><span>Java</span><span class="file">src/main/java/com/arithmetic/Calculator.java</span></div>
-          <pre><code>private static final MathContext DIVISION_CONTEXT =
-        new MathContext(16, RoundingMode.HALF_UP);
-private static final int DIVISION_SCALE = 10;
-
-public static Result calculate(BigDecimal a, BigDecimal b, Operation operation) {
-    if (a == null || b == null) {
-        throw new IllegalArgumentException("Both operands are required.");
-    }
-    if (operation == null) {
-        throw new IllegalArgumentException("Choose an operation.");
-    }
-
+    <article class="step">
+      <h3>Step 3 — Write the arithmetic program</h3>
+      <p><code>Calculator.java</code> contains the four operations. <code>BigDecimal</code> is used instead of <code>double</code> so that decimal values are exact and division by zero can be rejected explicitly.</p>
+      <pre><code>public static Result calculate(BigDecimal a, BigDecimal b, Operation operation) {
     BigDecimal value = switch (operation) {
-        case ADD      -&gt; a.add(b);
+        case ADD -&gt; a.add(b);
         case SUBTRACT -&gt; a.subtract(b);
         case MULTIPLY -&gt; a.multiply(b);
-        case DIVIDE   -&gt; {
+        case DIVIDE -&gt; {
             if (b.signum() == 0) {
                 throw new ArithmeticException("Division by zero is undefined.");
             }
-            yield a.divide(b, DIVISION_SCALE, RoundingMode.HALF_UP)
-                   .round(DIVISION_CONTEXT);
+            yield a.divide(b, 10, RoundingMode.HALF_UP);
         }
     };
-
-    return new Result(a, b, operation, normalise(value));
+    return new Result(a, b, operation, value);
 }</code></pre>
-        </div>
-        <p><span class="mono">App.java</span> exposes the core through a small HTTP layer built on <span class="mono">com.sun.net.httpserver</span>. Nothing outside the JDK is required.</p>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Method</th><th>Route</th><th>Purpose</th></tr></thead>
-            <tbody>
-              <tr><td class="mono">GET</td><td class="mono">/</td><td>Calculator interface and static assets</td></tr>
-              <tr><td class="mono">GET</td><td class="mono">/api/health</td><td>Readiness/liveness payload for Kubernetes</td></tr>
-              <tr><td class="mono">GET</td><td class="mono">/api/history</td><td>Last 12 calculations held by this replica</td></tr>
-              <tr><td class="mono">GET, POST</td><td class="mono">/api/calculate</td><td>Accepts <span class="mono">a</span>, <span class="mono">b</span> and <span class="mono">op</span>; returns JSON</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>The full source is in the public repository: <a href="https://github.com/Ksiri03/Arithmetic-Operations/tree/main/src">github.com/Ksiri03/Arithmetic-Operations/tree/main/src</a>.</p>
-      </div>
-    </div>
+      <p><code>App.java</code> starts a small HTTP server. The calculator page and the API use these routes:</p>
+      <table>
+        <thead>
+          <tr><th>Method and path</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>GET /</code></td><td>Serves the calculator page</td></tr>
+          <tr><td><code>GET /api/health</code></td><td>Health check used by Kubernetes</td></tr>
+          <tr><td><code>GET /api/history</code></td><td>Last calculations for the current replica</td></tr>
+          <tr><td><code>GET /api/calculate</code></td><td>Calculate from query parameters</td></tr>
+          <tr><td><code>POST /api/calculate</code></td><td>Calculate from form parameters</td></tr>
+        </tbody>
+      </table>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 04</span>Verify</div>
-      <div class="step-body">
-        <h3>Compile, test and run locally</h3>
-        <p>The scripts locate a complete JDK, compile the sources, copy the static assets, package an executable jar and run the zero-dependency test suite.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">build · test · run</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> powershell -ExecutionPolicy Bypass -File scripts\build.ps1
-<span class="prompt">PS&gt;</span> powershell -ExecutionPolicy Bypass -File scripts\test.ps1
-<span class="prompt">PS&gt;</span> powershell -ExecutionPolicy Bypass -File scripts\run.ps1</code></pre>
-        </div>
-        <div class="block term">
-          <div class="block-head"><span>Output</span><span class="file">test.ps1</span></div>
-          <pre><code>==&gt; Compiling Java sources
+    <article class="step">
+      <h3>Step 4 — Compile, test and run the program</h3>
+      <p>The project includes PowerShell scripts so the build is the same on every Windows machine:</p>
+      <span class="label">Command</span>
+      <pre><code>&gt; powershell -ExecutionPolicy Bypass -File scripts\build.ps1
+&gt; powershell -ExecutionPolicy Bypass -File scripts\test.ps1</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>==&gt; Compiling Java sources
 ==&gt; Copying static resources
 ==&gt; Packaging executable jar
-==&gt; Built build/arithmetic-ops.jar (361 KB)
+==&gt; Built build/arithmetic-ops.jar (22 KB)
 ==&gt; Compiling tests
 ==&gt; Running calculator test suite
 PASS  addition
@@ -1169,95 +558,73 @@ PASS  invalid number is rejected
 PASS  empty input is rejected
 PASS  operation aliases work for the API
 
-<span class="ok">11 passed, 0 failed</span>
-==&gt; All tests passed</code></pre>
-        </div>
-        <p>Open <span class="mono">http://localhost:8080</span>. The service prints its instance name and health URL at startup. The UI starts with <span class="mono">128 + 64</span>; every calculation is sent to the Java API.</p>
-        <figure class="shot">
-          <img src="screenshots/app-home.png" alt="Arithmetic Operations console running locally in Docker, showing the four operations, a clean tape and the runtime panel.">
-          <figcaption><span class="cap-title">Local run — Docker on port 8081</span><span>Figure 01</span></figcaption>
-        </figure>
+11 passed, 0 failed
+==&gt; All tests passed</pre>
       </div>
-    </div>
-
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 05</span>GitHub</div>
-      <div class="step-body">
-        <h3>Create the GitHub repository</h3>
-        <ol>
-          <li>Open <a href="https://github.com">github.com</a> and sign in.</li>
-          <li>Click <strong>+</strong> → <strong>New repository</strong>.</li>
-          <li>Name the repository <span class="mono">Arithmetic-Operations</span>.</li>
-          <li>Select <strong>Public</strong> and click <strong>Create repository</strong>.</li>
-          <li>Do not add a README on GitHub; the local project already contains one.</li>
-        </ol>
-        <p>The repository URL used by Jenkins is <a href="https://github.com/Ksiri03/Arithmetic-Operations">https://github.com/Ksiri03/Arithmetic-Operations</a>.</p>
+      <p>Start the service on port 8081. Port 8080 is already used by Jenkins on this machine.</p>
+      <span class="label">Command</span>
+      <pre><code>&gt; $env:PORT="8081"
+&gt; powershell -ExecutionPolicy Bypass -File scripts\run.ps1</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>Arithmetic Operations Console 1.0.0
+Listening on http://0.0.0.0:8081
+Health: http://localhost:8081/api/health</pre>
       </div>
-    </div>
+      <p>Open <code>http://localhost:8081</code> and try all four operations. The completed page is shown in Output screen 1.</p>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 06</span>Push</div>
-      <div class="step-body">
-        <h3>Upload the program using Git</h3>
-        <p>Run these commands in the project folder. The branch is renamed to <span class="mono">main</span> before the first push so Jenkins can track <span class="mono">*/main</span>.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">first push</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> git init
-<span class="prompt">PS&gt;</span> git add .
-<span class="prompt">PS&gt;</span> git commit -m "Initial arithmetic operations application with Docker and Kubernetes"
-<span class="prompt">PS&gt;</span> git branch -M main
-<span class="prompt">PS&gt;</span> git remote add origin https://github.com/Ksiri03/Arithmetic-Operations.git
-<span class="prompt">PS&gt;</span> git push -u origin main</code></pre>
-        </div>
-        <div class="block term">
-          <div class="block-head"><span>Output</span><span class="file">remote and history</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> git remote -v
-origin  https://github.com/Ksiri03/Arithmetic-Operations.git (fetch)
-origin  https://github.com/Ksiri03/Arithmetic-Operations.git (push)
+    <article class="step">
+      <h3>Step 5 — Create a GitHub repository</h3>
+      <ol>
+        <li>Open <code>https://github.com</code> and sign in.</li>
+        <li>Click the <b>+</b> icon and select <b>New repository</b>.</li>
+        <li>Enter the repository name as <code>Arithmetic-Operations</code>.</li>
+        <li>Select <b>Public</b> and click <b>Create repository</b>.</li>
+        <li>Do not add a README, <code>.gitignore</code> or licence on GitHub because the local project already contains them.</li>
+      </ol>
+      <p>The repository used for this record is <code>https://github.com/Ksiri03/Arithmetic-Operations.git</code>.</p>
+    </article>
 
-<span class="prompt">PS&gt;</span> git log --oneline -3
-61c88e1 Keep Jenkins smoke-test output ASCII safe
-63b6bd0 Initial arithmetic operations application with Docker and Kubernetes</code></pre>
-        </div>
-        <p>A second commit made the smoke-test output safe for the Windows console encoding. Both commits are on <span class="mono">main</span> and visible in the repository.</p>
+    <article class="step">
+      <h3>Step 6 — Upload the program using Git</h3>
+      <p>Open the terminal in the project folder and run the following commands one by one:</p>
+      <span class="label">Command</span>
+      <pre><code>&gt; git init
+&gt; git add .
+&gt; git commit -m "Initial arithmetic operations application"
+&gt; git branch -M main
+&gt; git remote add origin https://github.com/Ksiri03/Arithmetic-Operations.git
+&gt; git push -u origin main</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>Initialized empty Git repository in E:/devOps project/lab_external/Arithmetic-Operations/.git/
+[main (root-commit) 63b6bd0] Initial arithmetic operations application
+To https://github.com/Ksiri03/Arithmetic-Operations.git
+ * [new branch]      main -&gt; main
+branch 'main' set up to track 'origin/main'.</pre>
       </div>
-    </div>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 07</span>Verify</div>
-      <div class="step-body">
-        <h3>Verify the repository</h3>
-        <p>Open the repository in a browser. The source folders, <span class="mono">Dockerfile</span>, <span class="mono">Jenkinsfile</span>, Kubernetes manifests and documentation should all be present.</p>
-        <figure class="shot">
-          <img src="screenshots/github-repo.png" alt="Public GitHub repository Ksiri03/Arithmetic-Operations with source folders, Dockerfile, Jenkinsfile and README.">
-          <figcaption><span class="cap-title">Public repository — two commits on main</span><span>Figure 02</span></figcaption>
-        </figure>
-      </div>
-    </div>
+    <article class="step">
+      <h3>Step 7 — Verify the GitHub repository</h3>
+      <p>Open the repository in a browser. The source folders, <code>Dockerfile</code>, <code>Jenkinsfile</code>, <code>k8s</code> manifests and README are visible. Output screen 2 shows the public repository.</p>
+    </article>
   </section>
 
   <!-- ============================================================
        4(b)
   ============================================================= -->
-  <section class="part" id="part-b" aria-labelledby="part-b-title">
-    <div class="section-head">
-      <p class="section-index">4(b)</p>
-      <div>
-        <h2 class="section-title" id="part-b-title">Jenkins &amp; Docker</h2>
-        <p class="section-intro">The repository becomes a repeatable release: Jenkins checks out the commit, tests it, builds a versioned image, loads it into the cluster and verifies the live service.</p>
-      </div>
-    </div>
+  <section class="part" id="part-b">
+    <h2><span class="num">4(b)</span> Configure Jenkins, build the Docker image and deploy to Kubernetes</h2>
+    <p class="lead">Jenkins clones the repository, compiles the Java sources, runs the tests, builds a versioned Docker image, loads the image into the local kind cluster, updates the Kubernetes Deployment and runs four live smoke checks.</p>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 08</span>Container</div>
-      <div class="step-body">
-        <h3>Create the Dockerfile</h3>
-        <p>The image is built in two stages. The first stage compiles and packages the jar; the second ships only a JRE, the jar and a non-root user.</p>
-        <div class="block code">
-          <div class="block-head"><span>Dockerfile</span><span class="file">Arithmetic-Operations/Dockerfile</span></div>
-          <pre><code># syntax=docker/dockerfile:1
-
+    <article class="step">
+      <h3>Step 8 — Create the Dockerfile</h3>
+      <p>Create a file named <code>Dockerfile</code> in the project root. The first stage compiles the program; the second stage contains only the Java runtime and the jar.</p>
+      <pre><code># syntax=docker/dockerfile:1
 FROM eclipse-temurin:21-jdk-alpine AS build
+
 WORKDIR /src
 COPY src/main/java ./src/main/java
 COPY src/main/resources ./src/main/resources
@@ -1269,6 +636,7 @@ RUN find src/main/java -name '*.java' &gt; sources.txt \
     &amp;&amp; jar --create --file /app.jar --main-class com.arithmetic.App -C /out .
 
 FROM eclipse-temurin:21-jre-alpine
+
 WORKDIR /app
 COPY --from=build /app.jar /app/app.jar
 
@@ -1277,690 +645,262 @@ ENV PORT=8080 \
 
 USER 10001:10001
 EXPOSE 8080
+
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]</code></pre>
-        </div>
-        <ul>
-          <li><strong>Build stage</strong> — JDK 21 Alpine, compiles with <span class="mono">--release 17</span>, copies static assets, creates an executable jar.</li>
-          <li><strong>Runtime stage</strong> — JRE 21 Alpine, no compiler and no source code in the final image.</li>
-          <li><strong>Non-root</strong> — runs as UID/GID 10001. Kubernetes adds a read-only root filesystem and drops all Linux capabilities.</li>
-        </ul>
+      <p>The runtime image runs as a non-root user. Kubernetes also starts it with a read-only root filesystem and a small in-memory volume for <code>/tmp</code>.</p>
+    </article>
+
+    <article class="step">
+      <h3>Step 9 — Add the Docker and Jenkins files to GitHub</h3>
+      <span class="label">Command</span>
+      <pre><code>&gt; git add Dockerfile Jenkinsfile k8s scripts
+&gt; git commit -m "Add Docker, Jenkins and Kubernetes configuration"
+&gt; git push origin main</code></pre>
+    </article>
+
+    <article class="step">
+      <h3>Step 10 — Install and start Docker Desktop</h3>
+      <p>Install Docker Desktop for Windows from <code>https://www.docker.com/products/docker-desktop/</code>. Open Docker Desktop and wait until the engine is running. Verify it from PowerShell:</p>
+      <span class="label">Command</span>
+      <pre><code>&gt; docker --version
+&gt; docker info --format '{{.ServerVersion}}'</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>Docker version 29.7.2, build a7dcaa6
+29.7.2</pre>
       </div>
-    </div>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 09</span>Commit</div>
-      <div class="step-body">
-        <h3>Add the Dockerfile to GitHub</h3>
-        <p>Commit the Dockerfile before configuring Jenkins, so the pipeline can retrieve everything it needs from the repository.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">second commit</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> git add Dockerfile
-<span class="prompt">PS&gt;</span> git commit -m "Add Dockerfile"
-<span class="prompt">PS&gt;</span> git push origin main</code></pre>
-        </div>
+    <article class="step">
+      <h3>Step 11 — Build the Docker image manually</h3>
+      <p>Build the image once from the terminal before running the Jenkins job. This separates Docker problems from Jenkins problems.</p>
+      <span class="label">Command</span>
+      <pre><code>&gt; docker build -t arithmetic-ops:1.0.0 .
+&gt; docker images | findstr arithmetic-ops</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>REPOSITORY        TAG       IMAGE ID       CREATED         SIZE
+arithmetic-ops    1.0.0     18a3fd71277e   10 minutes ago  286MB
+arithmetic-ops    build-4   18a3fd71277e   10 minutes ago  286MB</pre>
       </div>
-    </div>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 10</span>Docker</div>
-      <div class="step-body">
-        <h3>Start Docker Desktop and verify the engine</h3>
-        <p>Open Docker Desktop and wait until it reports <strong>Engine running</strong>. Then verify the client and the engine, not only the client.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">Docker engine</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> docker --version
-Docker version 29.7.2, build a7dcaa6
-
-<span class="prompt">PS&gt;</span> docker info --format '{{.ServerVersion}}'
-29.7.2</code></pre>
-        </div>
+    <article class="step">
+      <h3>Step 12 — Run the container and test the API</h3>
+      <span class="label">Command</span>
+      <pre><code>&gt; docker run --rm -d --name arithmetic-demo -p 8082:8080 arithmetic-ops:1.0.0
+&gt; curl.exe "http://localhost:8082/api/calculate?a=144&amp;b=12&amp;op=divide"
+&gt; docker rm -f arithmetic-demo</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>{"a":"144","b":"12","operation":"divide","label":"Division",
+ "symbol":"÷","result":"12","expression":"144 ÷ 12 = 12",
+ "servedBy":"da25aa959d70"}</pre>
       </div>
-    </div>
+      <p>The same image answers correctly outside Kubernetes. The only difference in the cluster is that Kubernetes supplies the pod name and node name.</p>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 11</span>Image</div>
-      <div class="step-body">
-        <h3>Build and test the image manually</h3>
-        <p>Build the image before involving Jenkins. This isolates Docker problems from Jenkins problems.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">manual image test</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> docker build -t arithmetic-ops:1.0.0 .
-<span class="prompt">PS&gt;</span> docker images | findstr arithmetic-ops
-arithmetic-ops   1.0.0   af7ec66b6b77   287MB
+    <article class="step">
+      <h3>Step 13 — Install and start Jenkins</h3>
+      <p>Download the Jenkins WAR from <code>https://www.jenkins.io/download/</code>. On this machine the WAR and Jenkins home are stored on the <code>E:</code> drive because the system drive is small. Start Jenkins with:</p>
+      <span class="label">Command</span>
+      <pre><code>&gt; $env:JENKINS_HOME = "E:\devOps project\lab_external\.jenkins\home"
+&gt; $env:JAVA_HOME = "C:\Program Files\Java\jdk-25"
+&gt; &amp; "$env:JAVA_HOME\bin\java.exe" `
+    '-Djava.io.tmpdir=E:\devOps project\lab_external\.jenkins\tmp' `
+    -Djenkins.install.runSetupWizard=false `
+    -jar 'E:\devOps project\lab_external\.jenkins\jenkins.war' `
+    --httpPort=8080</code></pre>
+      <p>Open <code>http://localhost:8080</code>. Install the suggested plugins and create the administrator account. The Jenkins process must run on the host so that it can reach Docker Desktop, <code>kind</code> and <code>kubectl</code>.</p>
+    </article>
 
-<span class="prompt">PS&gt;</span> docker run -d --name arithmetic-local-demo -p 8081:8080 arithmetic-ops:1.0.0
-<span class="prompt">PS&gt;</span> curl.exe "http://localhost:8081/api/calculate?a=12&amp;b=8&amp;op=multiply"</code></pre>
-        </div>
-        <div class="block term">
-          <div class="block-head"><span>Output</span><span class="file">API response, trimmed</span></div>
-          <pre><code>{"a":"12","b":"8","operation":"multiply","label":"Multiplication",
- "symbol":"×","result":"96","expression":"12 × 8 = 96",
- "servedBy":"783adb7fdb2b","at":"2026-11-17T17:47:36Z"}</code></pre>
-        </div>
-        <p>The <span class="mono">servedBy</span> value is the container ID when running under Docker, and the pod name when running under Kubernetes. That is how the runtime panel proves where the answer came from.</p>
-      </div>
-    </div>
+    <article class="step">
+      <h3>Step 14 — Create the Jenkins job</h3>
+      <ol>
+        <li>On the Jenkins dashboard, click <b>New Item</b>.</li>
+        <li>Enter the name <code>Arithmetic-Operations</code>.</li>
+        <li>Select <b>Pipeline</b> and click <b>OK</b>.</li>
+        <li>Under <b>Pipeline</b>, select <b>Pipeline script from SCM</b>.</li>
+        <li>Select <b>Git</b> and enter the repository URL.</li>
+        <li>Set the branch specifier to <code>*/main</code> and the script path to <code>Jenkinsfile</code>.</li>
+        <li>Click <b>Save</b>.</li>
+      </ol>
+      <table>
+        <thead>
+          <tr><th>Jenkins setting</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Job name</td><td><code>Arithmetic-Operations</code></td></tr>
+          <tr><td>Job type</td><td>Pipeline</td></tr>
+          <tr><td>Definition</td><td>Pipeline script from SCM</td></tr>
+          <tr><td>Repository URL</td><td><code>https://github.com/Ksiri03/Arithmetic-Operations.git</code></td></tr>
+          <tr><td>Branch specifier</td><td><code>*/main</code></td></tr>
+          <tr><td>Script path</td><td><code>Jenkinsfile</code></td></tr>
+        </tbody>
+      </table>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 12</span>Jenkins</div>
-      <div class="step-body">
-        <h3>Install and configure Jenkins</h3>
-        <p>Jenkins 2.580.2 is started as a WAR on the host, because it must reach Docker Desktop, <span class="mono">kind</span> and <span class="mono">kubectl</span> directly. The home directory and temporary directory are placed on <span class="mono">E:</span> so the built-in node stays online.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">Jenkins process</span></div>
-          <pre><code>$env:JENKINS_HOME = "E:\devOps project\lab_external\.jenkins\home"
+    <article class="step">
+      <h3>Step 15 — Understand the pipeline stages</h3>
+      <p>The <code>Jenkinsfile</code> contains six stages. Each stage produces evidence in the console output.</p>
+      <table>
+        <thead>
+          <tr><th>Stage</th><th>Command or action</th><th>Evidence</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Checkout</td><td><code>checkout scm</code></td><td>Commit hash and commit message</td></tr>
+          <tr><td>Compile and test</td><td><code>scripts\test.ps1</code></td><td><span class="pass">11 passed, 0 failed</span></td></tr>
+          <tr><td>Build Docker image</td><td><code>docker build -t arithmetic-ops:build-&lt;n&gt; .</code></td><td>Image ID and size</td></tr>
+          <tr><td>Load image into kind</td><td><code>kind load docker-image ...</code></td><td>Image loaded into the cluster</td></tr>
+          <tr><td>Deploy to Kubernetes</td><td><code>kubectl set image</code>, <code>rollout status</code></td><td>Deployment updated and rolled out</td></tr>
+          <tr><td>Smoke test</td><td><code>scripts\smoke-test.ps1</code></td><td>Four <span class="pass">PASS</span> lines and health/history checks</td></tr>
+        </tbody>
+      </table>
+    </article>
 
-&amp; "C:\Program Files\Java\jdk-25\bin\java.exe" `
-  '-Djava.io.tmpdir=E:\devOps project\lab_external\.jenkins\tmp' `
-  -Djenkins.install.runSetupWizard=false `
-  -jar 'E:\devOps project\lab_external\.jenkins\jenkins.war' `
-  --httpPort=8080</code></pre>
-        </div>
-        <p>Open <span class="mono">http://localhost:8080</span>. Retrieve the initial administrator password from <span class="mono">JENKINS_HOME\secrets\initialAdminPassword</span>, install the suggested plugins and create the administrator account.</p>
-        <ul>
-          <li><strong>Git</strong> — clone the repository.</li>
-          <li><strong>Pipeline</strong> — run the declarative Jenkinsfile.</li>
-          <li><strong>Timestamper</strong> — timestamp every console line.</li>
-          <li><strong>Build tools on PATH</strong> — <span class="mono">java</span>, <span class="mono">javac</span>, <span class="mono">jar</span>, <span class="mono">git</span>, <span class="mono">docker</span>, <span class="mono">kind</span>, <span class="mono">kubectl</span>, <span class="mono">powershell</span>.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 13</span>Create job</div>
-      <div class="step-body">
-        <h3>Create the Jenkins job</h3>
-        <p>The recorded job is a <strong>Pipeline</strong> job named <span class="mono">Arithmetic-Operations</span>. The reference-style Freestyle equivalent is included in Appendix B and in <span class="mono">docs/JENKINS.md</span>; the commands are the same.</p>
-        <ol>
-          <li>Open the Jenkins dashboard → <strong>New Item</strong>.</li>
-          <li>Enter <span class="mono">Arithmetic-Operations</span>.</li>
-          <li>Select <strong>Pipeline</strong> and click <strong>OK</strong>.</li>
-          <li>Under <strong>Pipeline</strong>, choose <strong>Pipeline script from SCM</strong>.</li>
-          <li>Set SCM to <strong>Git</strong>, repository URL to <span class="mono">https://github.com/Ksiri03/Arithmetic-Operations.git</span>, branch to <span class="mono">*/main</span>, and script path to <span class="mono">Jenkinsfile</span>.</li>
-          <li>Save and click <strong>Build Now</strong>.</li>
-        </ol>
-        <figure class="shot">
-          <img src="screenshots/jenkins-job.png" alt="Jenkins job Arithmetic-Operations showing build 2 successful, artifact and permalinks.">
-          <figcaption><span class="cap-title">Jenkins job — two successful builds</span><span>Figure 03</span></figcaption>
-        </figure>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 14</span>Connect</div>
-      <div class="step-body">
-        <h3>Connect Jenkins with GitHub</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Setting</th><th>Value</th></tr></thead>
-            <tbody>
-              <tr><td>Source Code Management</td><td>Git</td></tr>
-              <tr><td>Repository URL</td><td class="mono">https://github.com/Ksiri03/Arithmetic-Operations.git</td></tr>
-              <tr><td>Branch Specifier</td><td class="mono">*/main</td></tr>
-              <tr><td>Credentials</td><td>None — the repository is public</td></tr>
-              <tr><td>Script Path</td><td class="mono">Jenkinsfile</td></tr>
-              <tr><td>Build Trigger</td><td>Manual for the demonstration</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>No webhook is required for the live demo. A webhook would make the pipeline run automatically on every push, but a manual <strong>Build Now</strong> is easier to narrate in front of faculty.</p>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 15</span>Pipeline</div>
-      <div class="step-body">
-        <h3>Configure the build steps</h3>
-        <p>The declarative <span class="mono">Jenkinsfile</span> has six stages. Each one produces evidence in the console.</p>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Stage</th><th>Command or action</th><th>Evidence</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Checkout</strong></td><td class="mono">checkout scm</td><td>Commit hash and message</td></tr>
-              <tr><td><strong>Compile and test</strong></td><td class="mono">scripts\test.ps1</td><td>11 tests passed</td></tr>
-              <tr><td><strong>Build Docker image</strong></td><td class="mono">docker build -t arithmetic-ops:build-2 .</td><td>Image ID and size</td></tr>
-              <tr><td><strong>Load into kind</strong></td><td class="mono">kind load docker-image …</td><td>Image present on node</td></tr>
-              <tr><td><strong>Deploy</strong></td><td class="mono">kubectl apply -k k8s</td><td>Rollout complete</td></tr>
-              <tr><td><strong>Smoke test</strong></td><td class="mono">scripts\smoke-test.ps1</td><td>4 operations + health + history</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="block code">
-          <div class="block-head"><span>Jenkinsfile</span><span class="file">stage excerpt</span></div>
-          <pre><code>stage('Compile and test') {
-    steps {
-        bat 'powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\test.ps1'
-    }
-}
-
-stage('Build Docker image') {
-    steps {
-        bat 'docker build -t %APP_NAME%:%IMAGE_TAG% -t %APP_NAME%:latest .'
-        bat 'docker image inspect %APP_NAME%:%IMAGE_TAG% --format "image={{.Id}} size={{.Size}}"'
-    }
-}
-
-stage('Smoke test') {
-    steps {
-        bat 'powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\smoke-test.ps1 -BaseUrl %APP_URL%'
-    }
-}</code></pre>
-        </div>
-        <p>The image tag is <span class="mono">build-${BUILD_NUMBER}</span>, not <span class="mono">latest</span>, when Kubernetes is updated. This makes each rollout traceable to one Jenkins build.</p>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 16</span>Build</div>
-      <div class="step-body">
-        <h3>Execute the Jenkins job</h3>
-        <p>Click <strong>Build Now</strong> and open the new build → <strong>Console Output</strong>. Build <strong>#2</strong> completed in 1 minute 1 second.</p>
-        <figure class="shot">
-          <img src="screenshots/jenkins-build.png" alt="Jenkins build number 2 succeeded, with revision 61c88e1, artifact and duration.">
-          <figcaption><span class="cap-title">Build #2 — finished successfully</span><span>Figure 04</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="screenshots/jenkins-console-tests.png" alt="Jenkins console showing compile and test stage with 11 tests passed and the start of the Docker image build.">
-          <figcaption><span class="cap-title">Console — 11 tests passed, Docker build begins</span><span>Figure 05</span></figcaption>
-        </figure>
-        <div class="block term">
-          <div class="block-head"><span>Console output</span><span class="file">build #2 · abridged</span></div>
-          <pre><code>==&gt; Running calculator test suite
-...
-<span class="ok">11 passed, 0 failed</span>
+    <article class="step">
+      <h3>Step 16 — Execute the Jenkins job</h3>
+      <p>Open the job and click <b>Build Now</b>. Open the new build and select <b>Console Output</b>. Build 4 completed successfully; the relevant lines are:</p>
+      <div class="output">
+        <span class="label">Console output</span>
+        <pre>11 passed, 0 failed
 ==&gt; All tests passed
-
-[Build Docker image]
-docker build -t arithmetic-ops:build-2 -t arithmetic-ops:latest .
-image=sha256:3e2ef8bb383f... size=74581872
-
-[Load image into kind]
-Image: "arithmetic-ops:build-2" not yet present on node, loading...
-
-[Deploy to Kubernetes]
+...
+#16 naming to docker.io/library/arithmetic-ops:build-4 done
+image=sha256:18a3fd71277e05dd36e60f4bd747a959f336f53a8b874234356f4e3aabef2b21 size=74234564
+...
 deployment.apps/arithmetic-app image updated
-Waiting for deployment "arithmetic-app" rollout to finish...
 deployment "arithmetic-app" successfully rolled out
-
-[Smoke test]
+...
 ==&gt; Checking health at http://localhost:30081/api/health
-    status=ok instance=arithmetic-app-69c4775ddc-nqspr
-    PASS 128 + 64 = 192
-    PASS 128 - 64 = 64
-    PASS 12 * 8 = 96
-    PASS 144 / 12 = 12
+    status=ok instance=arithmetic-app-559cc85f99-wcv8d node=arithmetic-lab-control-plane
+    PASS 128 + 64 = 192 [arithmetic-app-559cc85f99-wcv8d]
+    PASS 128 - 64 = 64 [arithmetic-app-559cc85f99-wcv8d]
+    PASS 12 * 8 = 96 [arithmetic-app-559cc85f99-wcv8d]
+    PASS 144 / 12 = 12 [arithmetic-app-559cc85f99-wcv8d]
 ==&gt; Smoke test passed: 4 operations + health + history
-
-Deployed arithmetic-ops:build-2 to kind cluster arithmetic-lab.
-Open http://localhost:30081
-<span class="ok">Finished: SUCCESS</span></code></pre>
-        </div>
+Finished: SUCCESS</pre>
       </div>
-    </div>
-
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 17</span>Verify</div>
-      <div class="step-body">
-        <h3>Verify the image and a container</h3>
-        <p>Confirm the image produced by Jenkins exists locally and can serve a calculation on its own, without Kubernetes.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">post-build container check</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> docker images | findstr arithmetic-ops
-arithmetic-ops   build-2   3e2ef8bb383f   287MB
-arithmetic-ops   latest    3e2ef8bb383f   287MB
-arithmetic-ops   1.0.0     af7ec66b6b77   287MB
-
-<span class="prompt">PS&gt;</span> docker run --rm -d --name arithmetic-check -p 8081:8080 arithmetic-ops:build-2
-<span class="prompt">PS&gt;</span> curl.exe http://localhost:8081/api/health</code></pre>
-        </div>
-        <div class="block term">
-          <div class="block-head"><span>Output</span><span class="file">health, trimmed</span></div>
-          <pre><code>{"status":"ok","service":"arithmetic-operations","version":"1.0.0",
- "instance":"783adb7fdb2b","node":"local-machine","javaVersion":"21.0.13",
- "checks":{"application":"UP","arithmeticCore":"UP"}}</code></pre>
-        </div>
-        <p>This is the same binary that Kubernetes serves. The only change is the amount of orchestration around it.</p>
+      <p>Output screens 3 to 6 show the Jenkins dashboard, build summary, test stage and final success screen.</p>
+      <div class="note">
+        <strong>Troubleshooting note.</strong> Build 3 failed at the first smoke-test health request because the NodePort briefly had no ready endpoint during the rolling update. The health request now retries for up to 48 seconds. Build 4 then completed successfully. This is a normal Kubernetes rollout timing issue, not a calculation error.
       </div>
-    </div>
-  </section>
+    </article>
 
-  <!-- ============================================================
-       4(c)
-  ============================================================= -->
-  <section class="part" id="part-c" aria-labelledby="part-c-title">
-    <div class="section-head">
-      <p class="section-index">4(c)</p>
-      <div>
-        <h2 class="section-title" id="part-c-title">Kubernetes</h2>
-        <p class="section-intro">The image is loaded into a local <span class="mono">kind</span> cluster and declared as a two-replica Deployment behind a NodePort Service. Readiness and liveness are wired to the same health endpoint Jenkins tests.</p>
+    <article class="step">
+      <h3>Step 17 — Create the kind cluster and deploy</h3>
+      <p>The Jenkins pipeline performs these Kubernetes commands automatically. They can also be run manually to create the cluster or recover the deployment:</p>
+      <span class="label">Command</span>
+      <pre><code>&gt; kind create cluster --name arithmetic-lab --config k8s\kind-config.yaml
+&gt; kind load docker-image arithmetic-ops:build-4 --name arithmetic-lab
+&gt; kubectl apply -k k8s
+&gt; kubectl -n arithmetic set image deployment/arithmetic-app app=arithmetic-ops:build-4
+&gt; kubectl -n arithmetic rollout status deployment/arithmetic-app</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>deployment.apps/arithmetic-app image updated
+deployment "arithmetic-app" successfully rolled out</pre>
       </div>
-    </div>
+      <p>The Service is a <code>NodePort</code> on port 30081. The kind configuration maps host port 30081 to the control-plane container, so the application is available at <code>http://localhost:30081</code>.</p>
+    </article>
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 18</span>Manifests</div>
-      <div class="step-body">
-        <h3>Write the Kubernetes manifests</h3>
-        <p>The Deployment carries the application configuration, probes, resource requests and a restrictive security context. The Service exposes port 80 internally and maps it to a fixed NodePort.</p>
-        <div class="block code">
-          <div class="block-head"><span>YAML</span><span class="file">k8s/deployment.yaml · excerpt</span></div>
-          <pre><code>spec:
-  replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-  template:
-    spec:
-      containers:
-        - name: app
-          image: arithmetic-ops:latest
-          imagePullPolicy: IfNotPresent
-          ports:
-            - name: http
-              containerPort: 8080
-          env:
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-          readinessProbe:
-            httpGet: { path: /api/health, port: http }
-          livenessProbe:
-            httpGet: { path: /api/health, port: http }
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities: { drop: ["ALL"] }</code></pre>
-        </div>
-        <div class="block code">
-          <div class="block-head"><span>YAML</span><span class="file">k8s/service.yaml</span></div>
-          <pre><code>apiVersion: v1
-kind: Service
-metadata:
-  name: arithmetic-service
-  namespace: arithmetic
-spec:
-  type: NodePort
-  selector:
-    app: arithmetic-app
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: http
-      nodePort: 30081</code></pre>
-        </div>
-        <p>The kind cluster maps container port <span class="mono">30081</span> to host port <span class="mono">30081</span> in <span class="mono">k8s/kind-config.yaml</span>. That single mapping is what makes the NodePort reachable from the browser.</p>
-      </div>
-    </div>
+    <article class="step">
+      <h3>Step 18 — Verify the Deployment, pods and Service</h3>
+      <span class="label">Command</span>
+      <pre><code>&gt; kubectl -n arithmetic get deployment,pods,svc -o wide
+&gt; curl.exe http://localhost:30081/api/health</code></pre>
+      <div class="output">
+        <span class="label">Output</span>
+        <pre>NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/arithmetic-app   2/2     2            2           11h
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 19</span>Cluster</div>
-      <div class="step-body">
-        <h3>Create the kind cluster</h3>
-        <p>Docker Desktop must be running. Create the cluster once; the Jenkins pipeline reuses it on later builds.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">local cluster</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> kind create cluster --name arithmetic-lab --config k8s\kind-config.yaml
-<span class="prompt">PS&gt;</span> kind get clusters
-arithmetic-lab
+NAME                                 READY   STATUS    RESTARTS   AGE
+pod/arithmetic-app-ddf7b7747-fhsj2   1/1     Running   0          3m
+pod/arithmetic-app-ddf7b7747-7rkwd   1/1     Running   0          3m
 
-<span class="prompt">PS&gt;</span> docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}"
-NAMES                          IMAGE                  PORTS
-arithmetic-lab-control-plane   kindest/node:v1.37.0   0.0.0.0:30081-&gt;30081/tcp,
-                                                      127.0.0.1:51515-&gt;6443/tcp</code></pre>
-        </div>
-      </div>
-    </div>
+NAME                         TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)
+service/arithmetic-service   NodePort   10.96.99.132   &lt;none&gt;        80:30081/TCP
 
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 20</span>Deploy</div>
-      <div class="step-body">
-        <h3>Load the image and deploy</h3>
-        <p><span class="mono">kind</span> nodes cannot pull a local image from the host Docker daemon, so the image is loaded directly into the node before the Deployment references it.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">deploy sequence</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> kind load docker-image arithmetic-ops:build-2 --name arithmetic-lab
-<span class="prompt">PS&gt;</span> kubectl apply -k k8s
-namespace/arithmetic unchanged
-service/arithmetic-service unchanged
-deployment.apps/arithmetic-app configured
-
-<span class="prompt">PS&gt;</span> kubectl -n arithmetic set image deployment/arithmetic-app app=arithmetic-ops:build-2
-deployment.apps/arithmetic-app image updated
-
-<span class="prompt">PS&gt;</span> kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s
-Waiting for deployment "arithmetic-app" rollout to finish...
-deployment "arithmetic-app" successfully rolled out</code></pre>
-        </div>
-        <p>The rolling update uses <span class="mono">maxUnavailable: 0</span>. Kubernetes starts a new pod, waits for readiness, and only then terminates an old one.</p>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 21</span>Verify</div>
-      <div class="step-body">
-        <h3>Verify the Deployment, pods and Service</h3>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">cluster state</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> kubectl -n arithmetic get deployment,pods,svc -o wide
-NAME                             READY   UP-TO-DATE   AVAILABLE   IMAGES
-deployment.apps/arithmetic-app   2/2     2            2           arithmetic-ops:build-2
-
-NAME                                  READY   STATUS    IP            NODE
-pod/arithmetic-app-67d9cd46b5-hmfr4   1/1     Running   10.244.0.17   arithmetic-lab-control-plane
-pod/arithmetic-app-67d9cd46b5-q9bz2   1/1     Running   10.244.0.18   arithmetic-lab-control-plane
-
-NAME                         TYPE       CLUSTER-IP    PORT(S)        AGE
-service/arithmetic-service   NodePort   10.96.99.132  80:30081/TCP   34m</code></pre>
-        </div>
-        <p>Both replicas are <span class="mono">1/1 Running</span> on the kind control-plane node. The Service has a cluster IP for internal traffic and a node port for the host.</p>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-rail"><span class="step-num">Step 22</span>Live</div>
-      <div class="step-body">
-        <h3>Open the live application and run the smoke test</h3>
-        <p>Open <span class="mono">http://localhost:30081</span>. The Runtime card shows a real pod name and the node reported by the Downward API. Perform the four operations and verify the tape.</p>
-        <figure class="shot">
-          <img src="screenshots/app-k8s-fold.png" alt="Arithmetic Operations running in Kubernetes, with divide selected, four results on the tape and the runtime replica and node visible.">
-          <figcaption><span class="cap-title">Live in Kubernetes — replica and node visible</span><span>Figure 06</span></figcaption>
-        </figure>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">API + smoke test</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> curl.exe http://localhost:30081/api/health
 {"status":"ok","service":"arithmetic-operations","version":"1.0.0",
- "instance":"arithmetic-app-67d9cd46b5-hmfr4",
+ "instance":"arithmetic-app-ddf7b7747-fhsj2",
  "node":"arithmetic-lab-control-plane","javaVersion":"21.0.13",
- "checks":{"application":"UP","arithmeticCore":"UP"}}
-
-<span class="prompt">PS&gt;</span> powershell -ExecutionPolicy Bypass -File scripts\smoke-test.ps1
-==&gt; Checking health at http://localhost:30081/api/health
-    status=ok instance=arithmetic-app-67d9cd46b5-hmfr4
-    PASS 128 + 64 = 192
-    PASS 128 - 64 = 64
-    PASS 12 * 8 = 96
-    PASS 144 / 12 = 12
-==&gt; Smoke test passed: 4 operations + health + history</code></pre>
-        </div>
-        <p>To prove that Kubernetes owns the desired state, restart the Deployment. A new ReplicaSet is created, the pods are replaced, and the service remains available throughout.</p>
-        <div class="block term">
-          <div class="block-head"><span>PowerShell</span><span class="file">rolling restart</span></div>
-          <pre><code><span class="prompt">PS&gt;</span> kubectl -n arithmetic rollout restart deployment/arithmetic-app
-deployment.apps/arithmetic-app restarted
-
-<span class="prompt">PS&gt;</span> kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s
-Waiting for deployment "arithmetic-app" rollout to finish...
-deployment "arithmetic-app" successfully rolled out</code></pre>
-        </div>
+ "checks":{"application":"UP","arithmeticCore":"UP"}}</pre>
       </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       4(d)
-  ============================================================= -->
-  <section class="part" id="part-d" aria-labelledby="part-d-title">
-    <div class="section-head">
-      <p class="section-index">4(d)</p>
-      <div>
-        <h2 class="section-title" id="part-d-title">Ten minutes, <em>live.</em></h2>
-        <p class="section-intro">The application is already running. The only slow part of the demonstration is the Jenkins build, which gives you time to explain each stage as it appears in the console.</p>
-      </div>
-    </div>
-
-    <div class="timeline" aria-label="Demonstration timeline">
-      <div class="timeline-row"><span class="time">0:00</span><strong>Open with the repository</strong><span>GitHub → source, Dockerfile, Jenkinsfile, manifests</span></div>
-      <div class="timeline-row"><span class="time">0:45</span><strong>Show the live console</strong><span>Add, subtract, multiply, divide; point at the pod name</span></div>
-      <div class="timeline-row"><span class="time">2:15</span><strong>Run Jenkins → Build Now</strong><span>Narrate the six stages while the console scrolls</span></div>
-      <div class="timeline-row"><span class="time">4:30</span><strong>Prove the Docker artifact</strong><span><span class="mono">docker images</span> and a one-off container on 8081</span></div>
-      <div class="timeline-row"><span class="time">6:00</span><strong>Show Kubernetes state</strong><span><span class="mono">get pods,svc</span>, rollout, probes, two replicas</span></div>
-      <div class="timeline-row"><span class="time">8:00</span><strong>Re-open the app</strong><span>Refresh, calculate, show the new pod name</span></div>
-      <div class="timeline-row"><span class="time">9:00</span><strong>Close and take questions</strong><span>Repository, build, image, deployment, smoke test</span></div>
-    </div>
-
-    <div class="pullquote">“The browser is only the interface. The Java service does the arithmetic; Kubernetes decides which replica answers.”<span>Say this once, while pointing at the Runtime card</span></div>
-
-    <p><strong>Keep one terminal ready.</strong> These are the only commands needed during the demonstration. Everything else is already built.</p>
-    <div class="block term">
-      <div class="block-head"><span>PowerShell</span><span class="file">demonstration commands</span></div>
-      <pre><code><span class="prompt">PS&gt;</span> docker images | findstr arithmetic-ops
-<span class="prompt">PS&gt;</span> docker run --rm -d --name demo -p 8081:8080 arithmetic-ops:1.0.0
-<span class="prompt">PS&gt;</span> curl.exe "http://localhost:8081/api/calculate?a=144&amp;b=12&amp;op=divide"
-<span class="prompt">PS&gt;</span> docker rm -f demo
-
-<span class="prompt">PS&gt;</span> kubectl -n arithmetic get deployment,pods,svc -o wide
-<span class="prompt">PS&gt;</span> kubectl -n arithmetic rollout restart deployment/arithmetic-app
-<span class="prompt">PS&gt;</span> kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s
-<span class="prompt">PS&gt;</span> kubectl -n arithmetic get pods</code></pre>
-    </div>
-
-    <h3 class="subhead">What to say at each stage</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Stage</th><th>One sentence to say</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Checkout</strong></td><td>“Jenkins clones the same commit that is visible on GitHub, so the build is reproducible.”</td></tr>
-          <tr><td><strong>Compile and test</strong></td><td>“Eleven tests must pass before an image is allowed to exist.”</td></tr>
-          <tr><td><strong>Docker build</strong></td><td>“The JDK stays in the build stage; the runtime image contains only the JRE and the jar.”</td></tr>
-          <tr><td><strong>kind load</strong></td><td>“The image is loaded into the cluster node because it is local and has not been pushed to a registry.”</td></tr>
-          <tr><td><strong>Deploy</strong></td><td>“Kubernetes performs a rolling update; maxUnavailable is zero, so one replica is always ready.”</td></tr>
-          <tr><td><strong>Smoke test</strong></td><td>“The pipeline tests the live NodePort, not a local process: four operations, health and history.”</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 class="subhead">If something goes down</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Symptom</th><th>Recovery</th></tr></thead>
-        <tbody>
-          <tr><td>Jenkins node offline</td><td>Restart Jenkins with <span class="mono">-Djava.io.tmpdir</span> on <span class="mono">E:</span>; check free disk space.</td></tr>
-          <tr><td>App unreachable</td><td><span class="mono">kubectl -n arithmetic get pods,svc</span>; then <span class="mono">kubectl logs deployment/arithmetic-app</span>.</td></tr>
-          <tr><td>Image missing in kind</td><td><span class="mono">kind load docker-image arithmetic-ops:build-2 --name arithmetic-lab</span>, then restart the rollout.</td></tr>
-          <tr><td>Port 30081 occupied</td><td>Change the NodePort and the kind port mapping, recreate the cluster, rerun the pipeline.</td></tr>
-          <tr><td>Smoke test fails</td><td>The previous pods stay live under the rolling update; inspect events and logs before retrying.</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 class="subhead">Viva, in one line each</h3>
-    <dl class="qa-grid">
-      <div class="qa"><dt>Why no Spring Boot?</dt><dd>The JDK HTTP server keeps the build dependency-free, offline and small. Spring Boot would be appropriate for a larger service.</dd></div>
-      <div class="qa"><dt>Why <span class="mono">BigDecimal</span>?</dt><dd>Decimal arithmetic stays exact; binary floating point cannot represent values such as 0.1 exactly. Division uses scale 10 with HALF_UP.</dd></div>
-      <div class="qa"><dt>What happens on divide by zero?</dt><dd>The API returns HTTP 400 with a clear error; the UI shows it and does not add the operation to the tape.</dd></div>
-      <div class="qa"><dt>Why a multi-stage image?</dt><dd>The compiler and source are excluded from the runtime. The final image only needs a JRE and the jar.</dd></div>
-      <div class="qa"><dt>Why non-root and read-only?</dt><dd>They reduce the impact of a compromised process. The app only writes to a small in-memory <span class="mono">/tmp</span>.</dd></div>
-      <div class="qa"><dt>Why two replicas?</dt><dd>It demonstrates rolling updates and service load balancing, and removes a single point of failure.</dd></div>
-      <div class="qa"><dt>Why NodePort?</dt><dd>It is the simplest way to expose a local kind cluster. Production would use an Ingress with DNS and TLS.</dd></div>
-      <div class="qa"><dt>Where is state stored?</dt><dd>Only the last 12 calculations per replica, in memory, deliberately. A restart clears the tape.</dd></div>
-      <div class="qa"><dt>How does Jenkins deploy?</dt><dd>Build, test, load the image into kind, apply the manifests, set the immutable image tag, wait for the rollout, smoke test.</dd></div>
-      <div class="qa"><dt>How would you productionise it?</dt><dd>Registry plus digest pinning, Ingress/TLS, Helm overlays, HPA, network policies, external config and secrets, logs and metrics.</dd></div>
-    </dl>
-
-    <p class="note"><span class="mono">Full runbook</span>The complete eight-to-ten-minute script, recovery commands and longer viva notes are in <span class="mono">docs/DEMO.md</span>. The Jenkins configuration, including the manual Freestyle equivalent, is in <span class="mono">docs/JENKINS.md</span>.</p>
+      <p>Open <code>http://localhost:30081</code>. Perform all four operations again. The Server panel shows the pod that served the request, which proves that Kubernetes is routing to a running replica. Output screen 7 shows the deployed application.</p>
+    </article>
   </section>
 
   <!-- ============================================================
        OUTPUT SCREENS
   ============================================================= -->
-  <section class="part" id="outputs" aria-labelledby="outputs-title">
-    <div class="section-head">
-      <p class="section-index">05</p>
-      <div>
-        <h2 class="section-title" id="outputs-title">Output screens</h2>
-        <p class="section-intro">The evidence is deliberately end to end: the public source, the green build, the live browser console and the Kubernetes runtime. All screenshots were captured from the running lab, not mocked.</p>
-      </div>
-    </div>
+  <section class="outputs" id="outputs">
+    <h2>Output screens</h2>
+    <p class="lead">The screenshots below were captured from the running application, the public GitHub repository and Jenkins build 4.</p>
 
-    <div class="gallery">
-      <figure class="shot wide">
-        <img src="screenshots/app-k8s.png" alt="Full Arithmetic Operations page served by Kubernetes: four operations on the tape, result 12, replica arithmetic-app-67d9cd46b5-hmfr4 and node arithmetic-lab-control-plane.">
-        <figcaption><span class="cap-title">Live service — four operations, clean tape, Kubernetes runtime</span><span>Figure 07 · localhost:30081</span></figcaption>
+    <figure>
+      <img src="screenshots/app-home-simple.png" alt="Simple arithmetic calculator running locally with four operations in the recent calculations list.">
+      <figcaption><b>Output screen 1.</b> The Java calculator running locally on port 8081. The four operations were calculated and added to the recent list.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="screenshots/github-repo-v2.png" alt="Public GitHub repository showing the source folders, Dockerfile, Jenkinsfile, Kubernetes manifests and README.">
+      <figcaption><b>Output screen 2.</b> The public GitHub repository after the source code and deployment files were pushed.</figcaption>
+    </figure>
+
+    <div class="shot-grid">
+      <figure>
+        <img src="screenshots/jenkins-dashboard-v2.png" alt="Jenkins dashboard showing the Arithmetic-Operations job and successful build 4.">
+        <figcaption><b>Output screen 3.</b> Jenkins dashboard with the successful build.</figcaption>
       </figure>
-
-      <figure class="shot wide">
-        <img src="screenshots/jenkins-console-success.png" alt="Jenkins console for build 2 showing four PASS smoke tests, the deployment message and Finished: SUCCESS.">
-        <figcaption><span class="cap-title">Jenkins build #2 — four smoke checks and successful completion</span><span>Figure 08</span></figcaption>
-      </figure>
-
-      <figure class="shot">
-        <img src="screenshots/jenkins-dashboard.png" alt="Jenkins dashboard showing the Arithmetic-Operations job with a successful build 2.">
-        <figcaption><span class="cap-title">Jenkins dashboard</span><span>Figure 09</span></figcaption>
-      </figure>
-
-      <figure class="shot">
-        <img src="screenshots/jenkins-job.png" alt="Jenkins job page for Arithmetic-Operations with build 2 successful and the archived arithmetic-ops.jar.">
-        <figcaption><span class="cap-title">Job page and build history</span><span>Figure 10</span></figcaption>
+      <figure>
+        <img src="screenshots/jenkins-build-v2.png" alt="Jenkins build 4 summary with the archived jar and Git revision.">
+        <figcaption><b>Output screen 4.</b> Jenkins build 4 summary.</figcaption>
       </figure>
     </div>
 
-    <p class="note"><span class="mono">Print note</span>The screenshots are full-resolution captures. On paper, the large console and application figures remain legible at A4 width; the two smaller Jenkins screens are included as context rather than as the primary proof.</p>
+    <figure>
+      <img src="screenshots/jenkins-console-tests-v2.png" alt="Jenkins console output showing the compile and test stage with all 11 tests passed.">
+      <figcaption><b>Output screen 5.</b> The compile and test stage: 11 passed, 0 failed, followed by the Docker image build.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="screenshots/jenkins-console-success-v2.png" alt="Jenkins console output showing four smoke-test PASS lines and Finished: SUCCESS.">
+      <figcaption><b>Output screen 6.</b> The smoke-test stage with four live API checks and the final <code>Finished: SUCCESS</code>.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="screenshots/app-k8s-simple.png" alt="Arithmetic calculator served by Kubernetes, with the pod name and node visible in the Server panel.">
+      <figcaption><b>Output screen 7.</b> The same application served by Kubernetes on port 30081. The Server panel shows the pod that answered the request and the kind node.</figcaption>
+    </figure>
   </section>
 
-</div>
-
-<!-- ============================================================
-     RESULT BAND
-============================================================= -->
-<section class="result-band" id="result" aria-labelledby="result-title">
-  <div class="shell">
-    <div>
-      <p class="eyebrow" style="color:#bbb6aa;margin-bottom:18px;">Result</p>
-      <h2 id="result-title">The question,<br><em>closed.</em></h2>
-      <p style="margin-top:24px;">The Java program is public on GitHub, Jenkins builds and tests it, Docker packages it as an immutable image, and Kubernetes serves two replicas behind a NodePort. The live service answered all four operations and both probes.</p>
-    </div>
-    <div class="result-facts">
-      <div><span class="mono">Repository</span><span>github.com/Ksiri03/<br>Arithmetic-Operations</span></div>
-      <div><span class="mono">Image</span><span>arithmetic-ops:build-2<br>non-root · JRE 21</span></div>
-      <div><span class="mono">Deployment</span><span>arithmetic-app<br>2/2 ready</span></div>
-      <div><span class="mono">Service</span><span>NodePort 30081<br>localhost:30081</span></div>
-    </div>
-  </div>
-</section>
-
-<div class="shell">
-  <!-- ============================================================
-       APPENDIX A
-  ============================================================= -->
-  <section class="appendix" id="appendix" aria-labelledby="appendix-title">
-    <div class="appendix-head">
-      <h2 id="appendix-title">Appendix A — Command reference</h2>
-      <span class="mono">Copy · run · verify</span>
-    </div>
-
-    <div class="block term">
-      <div class="block-head"><span>PowerShell</span><span class="file">local build and test</span></div>
-      <pre><code>cd "E:\devOps project\lab_external\Arithmetic-Operations"
-powershell -ExecutionPolicy Bypass -File scripts\build.ps1
-powershell -ExecutionPolicy Bypass -File scripts\test.ps1
-powershell -ExecutionPolicy Bypass -File scripts\run.ps1</code></pre>
-    </div>
-
-    <div class="block term">
-      <div class="block-head"><span>PowerShell</span><span class="file">Docker image</span></div>
-      <pre><code>docker build -t arithmetic-ops:1.0.0 .
-docker run --rm -d --name arithmetic-demo -p 8081:8080 arithmetic-ops:1.0.0
-curl.exe http://localhost:8081/api/health
-docker rm -f arithmetic-demo</code></pre>
-    </div>
-
-    <div class="block term">
-      <div class="block-head"><span>PowerShell</span><span class="file">kind + Kubernetes</span></div>
-      <pre><code>kind create cluster --name arithmetic-lab --config k8s\kind-config.yaml
-kind load docker-image arithmetic-ops:1.0.0 --name arithmetic-lab
-kubectl apply -k k8s
-kubectl -n arithmetic set image deployment/arithmetic-app app=arithmetic-ops:1.0.0
-kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s
-kubectl -n arithmetic get deployment,pods,svc -o wide
-curl.exe "http://localhost:30081/api/calculate?a=144&amp;b=12&amp;op=divide"</code></pre>
-    </div>
-
-    <div class="block term">
-      <div class="block-head"><span>PowerShell</span><span class="file">reset the tape between rehearsals</span></div>
-      <pre><code>kubectl -n arithmetic rollout restart deployment/arithmetic-app
-kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s</code></pre>
-    </div>
+  <section class="part" id="demonstration">
+    <h2>Demonstration sequence</h2>
+    <p class="lead">The complete flow can be demonstrated in about eight minutes.</p>
+    <table>
+      <thead>
+        <tr><th>Step</th><th>Action</th><th>What to show</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Open the GitHub repository.</td><td>Source code, Dockerfile, Jenkinsfile and Kubernetes manifests.</td></tr>
+        <tr><td>2</td><td>Open <code>http://localhost:30081</code> and perform 128 + 64, 128 − 64, 12 × 8 and 144 ÷ 12.</td><td>All four results and the pod name in the Server panel.</td></tr>
+        <tr><td>3</td><td>Open Jenkins, select the job and click <b>Build Now</b>.</td><td>Checkout, 11 tests, image build, kind load, rollout and four smoke checks.</td></tr>
+        <tr><td>4</td><td>Run <code>docker images | findstr arithmetic-ops</code> and run the image on port 8082.</td><td>The same artifact running outside Kubernetes.</td></tr>
+        <tr><td>5</td><td>Run <code>kubectl -n arithmetic get deployment,pods,svc</code>.</td><td>Two ready replicas and the NodePort Service.</td></tr>
+        <tr><td>6</td><td>Refresh the application after a rollout.</td><td>A new pod name appears in the Server panel.</td></tr>
+      </tbody>
+    </table>
   </section>
 
-  <!-- ============================================================
-       APPENDIX B
-  ============================================================= -->
-  <section class="appendix" aria-labelledby="freestyle-title">
-    <div class="appendix-head">
-      <h2 id="freestyle-title">Appendix B — Freestyle job equivalent</h2>
-      <span class="mono">Reference format</span>
-    </div>
-    <p>If the lab record requires the reference-style <strong>Freestyle project</strong>, create <span class="mono">Arithmetic-Operations-Freestyle</span>, point <strong>Source Code Management → Git</strong> at the repository and branch <span class="mono">*/main</span>, then add one <strong>Execute Windows batch command</strong>:</p>
-    <div class="block code">
-      <div class="block-head"><span>Windows batch</span><span class="file">Freestyle build step</span></div>
-      <pre><code>echo ===== 1. Compile and test =====
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts\test.ps1
-
-echo ===== 2. Build Docker image =====
-docker build -t arithmetic-ops:freestyle-%BUILD_NUMBER% -t arithmetic-ops:latest .
-docker images | findstr arithmetic-ops
-
-echo ===== 3. Run and test the API =====
-docker rm -f arithmetic-freestyle &gt;nul 2&gt;&amp;1
-docker run -d --name arithmetic-freestyle -p 8082:8080 arithmetic-ops:latest
-timeout /t 4 /nobreak &gt;nul
-powershell -NoProfile -Command "(Invoke-RestMethod 'http://localhost:8082/api/health').status"
-powershell -NoProfile -Command "(Invoke-RestMethod 'http://localhost:8082/api/calculate?a=144&amp;b=12&amp;op=divide').result"
-docker rm -f arithmetic-freestyle
-
-echo ===== 4. Load into kind and deploy =====
-kind load docker-image arithmetic-ops:freestyle-%BUILD_NUMBER% --name arithmetic-lab
-kubectl apply -k k8s
-kubectl -n arithmetic set image deployment/arithmetic-app app=arithmetic-ops:freestyle-%BUILD_NUMBER%
-kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s
-kubectl -n arithmetic get pods -o wide</code></pre>
-    </div>
-    <p>Stop after section 3 if the faculty only requires the reference scope: compile, execute and build the Docker image. Section 4 adds the Kubernetes part of this lab.</p>
-  </section>
-
-  <!-- ============================================================
-       APPENDIX C
-  ============================================================= -->
-  <section class="appendix" aria-labelledby="evidence-title">
-    <div class="appendix-head">
-      <h2 id="evidence-title">Appendix C — Evidence index</h2>
-      <span class="mono">Repository files</span>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>File</th><th>What it proves</th></tr></thead>
-        <tbody>
-          <tr><td class="mono">src/main/java/com/arithmetic/Calculator.java</td><td>BigDecimal arithmetic, validation and division-by-zero handling</td></tr>
-          <tr><td class="mono">src/main/java/com/arithmetic/App.java</td><td>HTTP routes, health, history and static file serving</td></tr>
-          <tr><td class="mono">Dockerfile</td><td>Multi-stage, non-root runtime image</td></tr>
-          <tr><td class="mono">Jenkinsfile</td><td>Six-stage CI/CD pipeline with smoke test</td></tr>
-          <tr><td class="mono">k8s/deployment.yaml</td><td>Two replicas, probes, resources and security context</td></tr>
-          <tr><td class="mono">k8s/service.yaml</td><td>NodePort 30081 exposing the application</td></tr>
-          <tr><td class="mono">docs/jenkins-build-2-console.txt</td><td>Complete Jenkins build #2 console log</td></tr>
-          <tr><td class="mono">docs/JENKINS.md</td><td>Pipeline and manual Freestyle configuration</td></tr>
-          <tr><td class="mono">docs/DEMO.md</td><td>Ten-minute faculty demonstration runbook</td></tr>
-          <tr><td class="mono">docs/screenshots/</td><td>GitHub, Jenkins and live Kubernetes captures</td></tr>
-        </tbody>
-      </table>
-    </div>
+  <section class="result-box" id="result">
+    <h2>Result</h2>
+    <p>The Java program performs addition, subtraction, multiplication and division and is available in the public GitHub repository. Jenkins build 4 cloned the repository, passed all 11 unit tests, built the Docker image, loaded it into the kind cluster, updated the Kubernetes Deployment and passed all four live smoke checks. The application is running with two replicas at <code>http://localhost:30081</code>.</p>
   </section>
 
   <footer class="doc-footer">
-    <div class="footer-grid">
-      <span>SET-no 04 · Arithmetic Operations</span>
-      <span>Java · Git · Jenkins · Docker · Kubernetes</span>
-      <span>DevOps Laboratory · 2026–27</span>
-    </div>
+    <span>Arithmetic Operations · SET 04 · DevOps Laboratory</span>
+    <span>Java · Git · Jenkins · Docker · Kubernetes</span>
   </footer>
-</div>
-
 </main>
 </body>
 </html>

@@ -14,7 +14,7 @@ This document records the Jenkins setup used for **Lab 04 – Arithmetic Operati
 | Repository | <https://github.com/Ksiri03/Arithmetic-Operations> |
 | Branch | `*/main` |
 | Script path | `Jenkinsfile` |
-| Last result | Build `#2` – **SUCCESS** (1 min 1 s) |
+| Last result | Build `#4` – **SUCCESS** (1 min 20 s) |
 | Jenkins home | `E:\devOps project\lab_external\.jenkins\home` |
 
 Jenkins runs as a host process on Windows because it must reach Docker Desktop, `kind` and `kubectl` directly. It is not containerised for this lab.
@@ -46,7 +46,7 @@ PASS 12 * 8 = 96 [arithmetic-app-...]
 PASS 144 / 12 = 12 [arithmetic-app-...]
 ==> Smoke test passed: 4 operations + health + history
 ...
-Deployed arithmetic-ops:build-2 to kind cluster arithmetic-lab. Open http://localhost:30081
+Deployed arithmetic-ops:build-4 to kind cluster arithmetic-lab. Open http://localhost:30081
 Finished: SUCCESS
 ```
 
@@ -174,16 +174,28 @@ The build scripts discover a complete JDK through `scripts/env.ps1`. This is nec
 | `docker: error during connect` | Start Docker Desktop and wait for the engine. |
 | `kind: command not found` | Add the kind binary directory to the Jenkins process PATH, then restart Jenkins. |
 | `rollout status` times out | `kubectl -n arithmetic describe deployment/arithmetic-app`; `kubectl -n arithmetic get pods`; check the image was loaded into kind. |
-| Smoke test gets connection refused | Wait for both pods to be `1/1 Running`; check `kubectl -n arithmetic get svc`. |
+| Smoke test gets connection refused | Wait for both pods to be `1/1 Running`; check `kubectl -n arithmetic get svc`. The script retries the first health request for up to 48 seconds to cover the NodePort readiness gap during a rollout. |
 | Port 30081 already in use | Edit `k8s/service.yaml` and `k8s/kind-config.yaml`, then rerun the pipeline. |
 | Image tag not updated in cluster | Use an immutable tag (`build-<n>`) and `kubectl set image`; do not rely on `latest` with `imagePullPolicy: IfNotPresent`. |
 
 ## 6. Evidence captured
 
+Current build `#4` evidence:
+
+- [`screenshots/jenkins-dashboard-v2.png`](screenshots/jenkins-dashboard-v2.png)
+- [`screenshots/jenkins-job-v2.png`](screenshots/jenkins-job-v2.png)
+- [`screenshots/jenkins-build-v2.png`](screenshots/jenkins-build-v2.png)
+- [`screenshots/jenkins-console-top-v2.png`](screenshots/jenkins-console-top-v2.png) – pipeline stages and the start of build `#4`
+- [`screenshots/jenkins-console-tests-v2.png`](screenshots/jenkins-console-tests-v2.png) – the 11/11 test result inside the Jenkins console
+- [`screenshots/jenkins-console-success-v2.png`](screenshots/jenkins-console-success-v2.png) – smoke checks and `Finished: SUCCESS`
+- [`jenkins-build-4-console.txt`](jenkins-build-4-console.txt) – complete console log for build `#4`
+
+Earlier build `#2` evidence, kept for the legacy write-up:
+
 - [`screenshots/jenkins-dashboard.png`](screenshots/jenkins-dashboard.png)
 - [`screenshots/jenkins-job.png`](screenshots/jenkins-job.png)
 - [`screenshots/jenkins-build.png`](screenshots/jenkins-build.png)
-- [`screenshots/jenkins-console-top.png`](screenshots/jenkins-console-top.png) – pipeline stages and the start of build `#2`
-- [`screenshots/jenkins-console-tests.png`](screenshots/jenkins-console-tests.png) – the 11/11 test result inside the Jenkins console
-- [`screenshots/jenkins-console-success.png`](screenshots/jenkins-console-success.png) – smoke checks and `Finished: SUCCESS`
-- [`jenkins-build-2-console.txt`](jenkins-build-2-console.txt) – complete console log for build `#2`
+- [`screenshots/jenkins-console-top.png`](screenshots/jenkins-console-top.png)
+- [`screenshots/jenkins-console-tests.png`](screenshots/jenkins-console-tests.png)
+- [`screenshots/jenkins-console-success.png`](screenshots/jenkins-console-success.png)
+- [`jenkins-build-2-console.txt`](jenkins-build-2-console.txt)

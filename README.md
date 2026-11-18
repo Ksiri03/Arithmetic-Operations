@@ -25,7 +25,7 @@ A precise, dependency-free Java calculator for addition, subtraction, multiplica
 ```text
 Arithmetic-Operations/
 ├── src/main/java/com/arithmetic/     Calculator.java, App.java
-├── src/main/resources/static/        index.html, styles.css, app.js, fonts
+├── src/main/resources/static/        index.html, styles.css, app.js, favicon.svg
 ├── src/test/java/com/arithmetic/     CalculatorTest.java
 ├── k8s/                              namespace, deployment, service, kind config
 ├── scripts/                          build, test, run, deploy, smoke test
@@ -48,7 +48,7 @@ powershell -ExecutionPolicy Bypass -File scripts\run.ps1
 
 Open <http://localhost:8080>.
 
-The UI starts with `128 + 64`; choose an operation, enter two numbers, and press **Enter** or **Calculate**. Each answer comes from the Java API, not from JavaScript. The runtime panel shows the pod that handled the request.
+The UI starts with `128 + 64`; choose an operation, enter two numbers, and press **Enter** or **Calculate**. Each answer comes from the Java API, not from JavaScript. The Server panel shows the pod that handled the request.
 
 ## API
 
@@ -88,10 +88,10 @@ Example response:
 
 ```powershell
 docker build -t arithmetic-ops:1.0.0 .
-docker run --rm -p 8081:8080 arithmetic-ops:1.0.0
+docker run --rm -p 8082:8080 arithmetic-ops:1.0.0
 ```
 
-Open <http://localhost:8081>.
+Open <http://localhost:8082>.
 
 ## Kubernetes with kind
 
@@ -151,6 +151,7 @@ Create a **Pipeline** job pointing at this repository, branch `*/main`, script p
 - [Lab write-up (PDF)](docs/lab-writeup.pdf) – printable A4 copy.
 - [Demonstration runbook](docs/DEMO.md) – an 8–10 minute sequence for the faculty external, with viva questions and recovery steps.
 - [Jenkins configuration](docs/JENKINS.md) – the declarative pipeline plus the manual Freestyle equivalent.
+- [Legacy write-up](docs/legacy/lab-writeup-v1.html) – the earlier editorial-style record, preserved as a backup.
 
 ## Notes
 

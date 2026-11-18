@@ -60,7 +60,7 @@ $env:Path = "$env:JAVA_HOME\bin;" + $env:Path
 Sign in with `admin` / `arithmetic04`. If the application pods do not recover, run:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\deploy-kind.ps1 -ImageTag build-2
+powershell -ExecutionPolicy Bypass -File scripts\deploy-kind.ps1 -ImageTag build-4
 ```
 
 ---
@@ -92,12 +92,13 @@ Open <http://localhost:30081>.
 3. Select **Multiply**, `12 × 8` → **96**.
 4. Select **Divide**, `144 ÷ 12` → **12**.
 
-Point at the tape: all four operations are recorded. Point at the **Runtime** card:
+Point at **Recent calculations**: all four operations are recorded. Point at the **Server** card:
 
 - **Replica** – the actual Kubernetes pod name.
 - **Node** – `arithmetic-lab-control-plane`.
 - **Version** – `1.0.0`.
-- **API UP / ARITHMETIC CORE UP** – liveness from the service.
+- **Uptime** – how long the serving replica has been running.
+- **Online** – the health status returned by `/api/health`.
 
 **Say:**
 
@@ -149,9 +150,9 @@ In PowerShell:
 
 ```powershell
 docker images | findstr arithmetic-ops
-docker run --rm -d --name arithmetic-demo -p 8081:8080 arithmetic-ops:1.0.0
+docker run --rm -d --name arithmetic-demo -p 8082:8080 arithmetic-ops:1.0.0
 Start-Sleep -Seconds 3
-curl.exe "http://localhost:8081/api/calculate?a=12&b=8&op=multiply"
+curl.exe "http://localhost:8082/api/calculate?a=12&b=8&op=multiply"
 docker rm -f arithmetic-demo
 ```
 
@@ -197,7 +198,7 @@ kubectl -n arithmetic get pods
 
 > Kubernetes is told the desired state: two replicas of this image. It performs a rolling update with `maxUnavailable: 0`, so one pod is always available. The readiness probe decides when a new pod can receive traffic; the liveness probe restarts a stuck container. If a pod is deleted, the ReplicaSet creates another one.
 
-Refresh <http://localhost:30081> and calculate one operation. The Runtime card should show a new pod name.
+Refresh <http://localhost:30081> and calculate one operation. The Server card should show a new pod name.
 
 Optional scale proof:
 
@@ -228,7 +229,7 @@ Show the final Jenkins success screen and the live application once more. Stop t
 > `double` is binary floating point and cannot represent values such as `0.1` exactly. `BigDecimal` gives exact decimal results for the operations in this lab. Division uses scale 10 with `HALF_UP`, and division by zero is rejected explicitly.
 
 **What happens if the divisor is zero?**
-> The service returns HTTP 400 with a clear error: `Cannot divide by zero.` The UI shows the message and does not add the operation to the tape. The test suite covers this case.
+> The service returns HTTP 400 with a clear error: `Cannot divide by zero.` The UI shows the message and does not add the operation to the recent calculations list. The test suite covers this case.
 
 **What is the difference between the image tag and `latest`?**
 > Jenkins tags every build with an immutable `build-<n>` tag and also updates `latest` for convenience. Kubernetes is updated with the immutable tag, so the rollout is deterministic. Reusing `latest` with `imagePullPolicy: IfNotPresent` can leave old pods running the old image.
@@ -246,7 +247,7 @@ Show the final Jenkins success screen and the live application once more. Stop t
 > Push the image to a registry instead of `kind load`, use immutable digests, add an Ingress and TLS, use Helm or Kustomize overlays per environment, add HPA, network policies, PodDisruptionBudget, externalised configuration/secrets, structured logs and metrics, and a real integration-test stage.
 
 **Where is the application state stored?**
-> Only the last 12 calculations per replica are kept in memory, on purpose, to demonstrate routing. A restart clears the tape. A real application would use a database or Redis and would not keep state in the pod.
+> Only the last 12 calculations per replica are kept in memory, on purpose, to demonstrate routing. A restart clears the recent list. A real application would use a database or Redis and would not keep state in the pod.
 
 ---
 
@@ -312,4 +313,4 @@ kubectl -n arithmetic rollout restart deployment/arithmetic-app
 kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s
 ```
 
-This clears the in-memory tape on both replicas. The first page load records `128 + 64 = 192`; add subtract, multiply and divide to produce a clean four-row tape for the screenshot.
+This clears the in-memory recent list on both replicas. The first page load records `128 + 64 = 192`; add subtract, multiply and divide to produce a clean four-row list for the screenshot.
