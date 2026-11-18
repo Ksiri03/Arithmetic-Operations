@@ -5,8 +5,27 @@ param(
 $ErrorActionPreference = "Stop"
 
 Write-Host "==> Checking health at $BaseUrl/api/health" -ForegroundColor White
-$health = Invoke-RestMethod -Uri "$BaseUrl/api/health" -Method Get -TimeoutSec 20
-if ($health.status -ne "ok") { throw "Health check failed: $($health | ConvertTo-Json -Compress)" }
+
+# A rolling update can briefly leave the NodePort without a ready endpoint.
+# Retry the first request instead of failing the whole pipeline on that gap.
+$health = $null
+for ($attempt = 1; $attempt -le 12; $attempt++) {
+    try {
+        $health = Invoke-RestMethod -Uri "$BaseUrl/api/health" -Method Get -TimeoutSec 10
+        if ($health.status -eq "ok") { break }
+    } catch {
+        $health = $null
+        if ($attempt -lt 12) {
+            Write-Host "    health attempt $attempt did not answer; retrying in 4 seconds" -ForegroundColor DarkYellow
+            Start-Sleep -Seconds 4
+        }
+    }
+}
+
+if ($null -eq $health -or $health.status -ne "ok") {
+    throw "Health check failed after retries: $BaseUrl/api/health"
+}
+
 Write-Host "    status=$($health.status) instance=$($health.instance) node=$($health.node)" -ForegroundColor Gray
 
 $checks = @(
