@@ -1,0 +1,248 @@
+Started from command line by admin
+Obtained Jenkinsfile from git https://github.com/Ksiri03/Arithmetic-Operations.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/Ksiri03/Arithmetic-Operations.git
+ > git.exe init E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations # timeout=10
+Fetching upstream changes from https://github.com/Ksiri03/Arithmetic-Operations.git
+ > git.exe --version # timeout=10
+ > git --version # 'git version 2.56.0.windows.4'
+ > git.exe fetch --tags --force --progress -- https://github.com/Ksiri03/Arithmetic-Operations.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git.exe config remote.origin.url https://github.com/Ksiri03/Arithmetic-Operations.git # timeout=10
+ > git.exe config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git.exe rev-parse "refs/remotes/origin/main^{commit}" # timeout=10
+Checking out Revision 61c88e178f601116b73606081f2346e0bdfe596f (refs/remotes/origin/main)
+ > git.exe config core.sparsecheckout # timeout=10
+ > git.exe checkout -f 61c88e178f601116b73606081f2346e0bdfe596f # timeout=10
+Commit message: "Keep Jenkins smoke-test output ASCII safe"
+ > git.exe rev-list --no-walk 63b6bd03f0376901287becef42b9ab71f416a95d # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-11-17T17:40:33.587Z] Selected Git installation does not exist. Using Default
+[2026-11-17T17:40:33.588Z] The recommended git tool is: NONE
+[2026-11-17T17:40:33.588Z] No credentials specified
+[2026-11-17T17:40:33.589Z]  > git.exe rev-parse --resolve-git-dir E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations\.git # timeout=10
+[2026-11-17T17:40:33.721Z] Fetching changes from the remote Git repository
+[2026-11-17T17:40:33.732Z]  > git.exe config remote.origin.url https://github.com/Ksiri03/Arithmetic-Operations.git # timeout=10
+[2026-11-17T17:40:33.861Z] Fetching upstream changes from https://github.com/Ksiri03/Arithmetic-Operations.git
+[2026-11-17T17:40:33.861Z]  > git.exe --version # timeout=10
+[2026-11-17T17:40:33.956Z]  > git --version # 'git version 2.56.0.windows.4'
+[2026-11-17T17:40:33.956Z]  > git.exe fetch --tags --force --progress -- https://github.com/Ksiri03/Arithmetic-Operations.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-11-17T17:40:34.810Z]  > git.exe rev-parse "refs/remotes/origin/main^{commit}" # timeout=10
+[2026-11-17T17:40:34.896Z] Checking out Revision 61c88e178f601116b73606081f2346e0bdfe596f (refs/remotes/origin/main)
+[2026-11-17T17:40:34.896Z]  > git.exe config core.sparsecheckout # timeout=10
+[2026-11-17T17:40:34.970Z]  > git.exe checkout -f 61c88e178f601116b73606081f2346e0bdfe596f # timeout=10
+[2026-11-17T17:40:35.096Z] Commit message: "Keep Jenkins smoke-test output ASCII safe"
+[Pipeline] bat
+[2026-11-17T17:40:35.390Z] 
+[2026-11-17T17:40:35.391Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>git rev-parse --short HEAD   && git log -1 --pretty=format:"%h %s" 
+[2026-11-17T17:40:35.391Z] 61c88e1
+[2026-11-17T17:40:35.392Z] 61c88e1 Keep Jenkins smoke-test output ASCII safe
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Compile and test)
+[Pipeline] bat
+[2026-11-17T17:40:35.832Z] 
+[2026-11-17T17:40:35.833Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>powershell -NoProfile -ExecutionPolicy Bypass -File scripts\test.ps1 
+[2026-11-17T17:40:36.782Z] ==> Compiling Java sources
+[2026-11-17T17:40:39.327Z] ==> Copying static resources
+[2026-11-17T17:40:39.328Z] ==> Packaging executable jar
+[2026-11-17T17:40:39.590Z] ==> Built build/arithmetic-ops.jar (361 KB)
+[2026-11-17T17:40:39.590Z] ==> Compiling tests
+[2026-11-17T17:40:41.496Z] ==> Running calculator test suite
+[2026-11-17T17:40:41.496Z] PASS  addition
+[2026-11-17T17:40:41.496Z] PASS  subtraction with a negative result
+[2026-11-17T17:40:41.496Z] PASS  multiplication with decimals
+[2026-11-17T17:40:41.496Z] PASS  division with a decimal result
+[2026-11-17T17:40:41.496Z] PASS  repeating division is rounded to ten places
+[2026-11-17T17:40:41.496Z] PASS  negative operands
+[2026-11-17T17:40:41.496Z] PASS  large values stay exact
+[2026-11-17T17:40:41.496Z] PASS  division by zero is rejected
+[2026-11-17T17:40:41.496Z] PASS  invalid number is rejected
+[2026-11-17T17:40:41.497Z] PASS  empty input is rejected
+[2026-11-17T17:40:41.497Z] PASS  operation aliases work for the API
+[2026-11-17T17:40:41.497Z] 
+[2026-11-17T17:40:41.497Z] 11 passed, 0 failed
+[2026-11-17T17:40:41.497Z] ==> All tests passed
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Docker image)
+[Pipeline] bat
+[2026-11-17T17:40:41.988Z] 
+[2026-11-17T17:40:41.989Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>docker build -t arithmetic-ops:build-2 -t arithmetic-ops:latest . 
+[2026-11-17T17:40:42.946Z] #0 building with "desktop-linux" instance using docker driver
+[2026-11-17T17:40:42.946Z] 
+[2026-11-17T17:40:42.946Z] #1 [internal] load build definition from Dockerfile
+[2026-11-17T17:40:42.946Z] #1 transferring dockerfile: 1.36kB 0.0s done
+[2026-11-17T17:40:42.946Z] #1 DONE 0.0s
+[2026-11-17T17:40:42.946Z] 
+[2026-11-17T17:40:42.946Z] #2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+[2026-11-17T17:40:43.913Z] #2 DONE 1.0s
+[2026-11-17T17:40:43.913Z] 
+[2026-11-17T17:40:43.913Z] #3 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+[2026-11-17T17:40:43.913Z] #3 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.1s done
+[2026-11-17T17:40:43.914Z] #3 CACHED
+[2026-11-17T17:40:44.201Z] 
+[2026-11-17T17:40:44.201Z] #4 [internal] load metadata for docker.io/library/eclipse-temurin:21-jdk-alpine
+[2026-11-17T17:40:45.185Z] #4 DONE 0.9s
+[2026-11-17T17:40:45.185Z] 
+[2026-11-17T17:40:45.185Z] #5 [internal] load metadata for docker.io/library/eclipse-temurin:21-jre-alpine
+[2026-11-17T17:40:45.185Z] #5 DONE 1.0s
+[2026-11-17T17:40:45.185Z] 
+[2026-11-17T17:40:45.185Z] #6 [internal] load .dockerignore
+[2026-11-17T17:40:45.185Z] #6 transferring context: 97B 0.0s done
+[2026-11-17T17:40:45.185Z] #6 DONE 0.0s
+[2026-11-17T17:40:45.185Z] 
+[2026-11-17T17:40:45.185Z] #7 [internal] load build context
+[2026-11-17T17:40:45.186Z] #7 DONE 0.0s
+[2026-11-17T17:40:45.186Z] 
+[2026-11-17T17:40:45.186Z] #8 [stage-1 1/3] FROM docker.io/library/eclipse-temurin:21-jre-alpine@sha256:ac05c3c42b7c2f1a52c9bd52f01041fa1958231b15ebeae7420429cbc5baf474
+[2026-11-17T17:40:45.186Z] #8 resolve docker.io/library/eclipse-temurin:21-jre-alpine@sha256:ac05c3c42b7c2f1a52c9bd52f01041fa1958231b15ebeae7420429cbc5baf474
+[2026-11-17T17:40:45.485Z] #8 ...
+[2026-11-17T17:40:45.485Z] 
+[2026-11-17T17:40:45.485Z] #9 [build 1/5] FROM docker.io/library/eclipse-temurin:21-jdk-alpine@sha256:82801f9dcdcbad5a05082aba8c86d1da5b72ccb498e71318b1f91b5a477887b3
+[2026-11-17T17:40:45.486Z] #9 resolve docker.io/library/eclipse-temurin:21-jdk-alpine@sha256:82801f9dcdcbad5a05082aba8c86d1da5b72ccb498e71318b1f91b5a477887b3 0.1s done
+[2026-11-17T17:40:45.486Z] #9 DONE 0.1s
+[2026-11-17T17:40:45.486Z] 
+[2026-11-17T17:40:45.486Z] #8 [stage-1 1/3] FROM docker.io/library/eclipse-temurin:21-jre-alpine@sha256:ac05c3c42b7c2f1a52c9bd52f01041fa1958231b15ebeae7420429cbc5baf474
+[2026-11-17T17:40:45.486Z] #8 resolve docker.io/library/eclipse-temurin:21-jre-alpine@sha256:ac05c3c42b7c2f1a52c9bd52f01041fa1958231b15ebeae7420429cbc5baf474 0.1s done
+[2026-11-17T17:40:45.486Z] #8 DONE 0.1s
+[2026-11-17T17:40:45.486Z] 
+[2026-11-17T17:40:45.486Z] #7 [internal] load build context
+[2026-11-17T17:40:45.486Z] #7 transferring context: 404.30kB 0.2s done
+[2026-11-17T17:40:45.486Z] #7 DONE 0.2s
+[2026-11-17T17:40:45.486Z] 
+[2026-11-17T17:40:45.486Z] #10 [build 2/5] WORKDIR /src
+[2026-11-17T17:40:45.486Z] #10 CACHED
+[2026-11-17T17:40:45.486Z] 
+[2026-11-17T17:40:45.486Z] #11 [build 4/5] COPY src/main/resources ./src/main/resources
+[2026-11-17T17:40:45.486Z] #11 CACHED
+[2026-11-17T17:40:45.486Z] 
+[2026-11-17T17:40:45.486Z] #12 [stage-1 2/3] WORKDIR /app
+[2026-11-17T17:40:45.486Z] #12 CACHED
+[2026-11-17T17:40:45.486Z] 
+[2026-11-17T17:40:45.486Z] #13 [build 3/5] COPY src/main/java ./src/main/java
+[2026-11-17T17:40:45.486Z] #13 CACHED
+[2026-11-17T17:40:45.486Z] 
+[2026-11-17T17:40:45.486Z] #14 [build 5/5] RUN find src/main/java -name '*.java' > sources.txt     && mkdir -p /out     && javac --release 17 -encoding UTF-8 -d /out @sources.txt     && cp -R src/main/resources/. /out/     && jar --create --file /app.jar --main-class com.arithmetic.App -C /out .
+[2026-11-17T17:40:45.486Z] #14 CACHED
+[2026-11-17T17:40:45.486Z] 
+[2026-11-17T17:40:45.486Z] #15 [stage-1 3/3] COPY --from=build /app.jar /app/app.jar
+[2026-11-17T17:40:45.487Z] #15 CACHED
+[2026-11-17T17:40:45.487Z] 
+[2026-11-17T17:40:45.487Z] #16 exporting to image
+[2026-11-17T17:40:45.487Z] #16 exporting layers done
+[2026-11-17T17:40:45.487Z] #16 exporting manifest sha256:f7e92849a7bb6c9d05496289cc4474152cddc9aee06c098a295146a1a853ac30
+[2026-11-17T17:40:45.776Z] #16 exporting manifest sha256:f7e92849a7bb6c9d05496289cc4474152cddc9aee06c098a295146a1a853ac30 0.0s done
+[2026-11-17T17:40:45.776Z] #16 exporting config sha256:7aef76d3b7991b4f42b876f64523322432cae7636a737a916d56580f109e0c44 0.0s done
+[2026-11-17T17:40:45.776Z] #16 exporting attestation manifest sha256:d80d876d9fd8386d5f0697477263c233f2c1721fc69041ed44a1d14a8966c1b7 0.0s done
+[2026-11-17T17:40:45.776Z] #16 exporting manifest list sha256:3e2ef8bb383f231809c894b7d2514e9d67d9fb810b8a94d3d867bd3f1a69ba7e 0.0s done
+[2026-11-17T17:40:45.776Z] #16 naming to docker.io/library/arithmetic-ops:build-2
+[2026-11-17T17:40:46.073Z] #16 naming to docker.io/library/arithmetic-ops:build-2 done
+[2026-11-17T17:40:46.073Z] #16 unpacking to docker.io/library/arithmetic-ops:build-2 0.0s done
+[2026-11-17T17:40:46.073Z] #16 naming to docker.io/library/arithmetic-ops:latest done
+[2026-11-17T17:40:46.073Z] #16 unpacking to docker.io/library/arithmetic-ops:latest 0.0s done
+[2026-11-17T17:40:46.073Z] #16 DONE 0.3s
+[Pipeline] bat
+[2026-11-17T17:40:46.720Z] 
+[2026-11-17T17:40:46.720Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>docker image inspect arithmetic-ops:build-2 --format "image={{.Id}} size={{.Size}}" 
+[2026-11-17T17:40:46.973Z] image=sha256:3e2ef8bb383f231809c894b7d2514e9d67d9fb810b8a94d3d867bd3f1a69ba7e size=74581872
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Load image into kind)
+[Pipeline] bat
+[2026-11-17T17:40:47.492Z] 
+[2026-11-17T17:40:47.492Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>kind get clusters   | findstr /C:"arithmetic-lab"   1>nul  || kind create cluster --name arithmetic-lab --config k8s\kind-config.yaml 
+[2026-11-17T17:40:47.763Z] 
+[2026-11-17T17:40:47.763Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>kind load docker-image arithmetic-ops:build-2 --name arithmetic-lab 
+[2026-11-17T17:40:49.173Z] Image: "arithmetic-ops:build-2" with ID "sha256:3e2ef8bb383f231809c894b7d2514e9d67d9fb810b8a94d3d867bd3f1a69ba7e" not yet present on node "arithmetic-lab-control-plane", loading...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to Kubernetes)
+[Pipeline] bat
+[2026-11-17T17:41:07.740Z] 
+[2026-11-17T17:41:07.740Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>kubectl apply -k k8s 
+[2026-11-17T17:41:08.315Z] namespace/arithmetic unchanged
+[2026-11-17T17:41:08.316Z] service/arithmetic-service unchanged
+[2026-11-17T17:41:08.599Z] deployment.apps/arithmetic-app configured
+[2026-11-17T17:41:08.599Z] 
+[2026-11-17T17:41:08.599Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>kubectl -n arithmetic set image deployment/arithmetic-app app=arithmetic-ops:build-2 
+[2026-11-17T17:41:08.895Z] deployment.apps/arithmetic-app image updated
+[2026-11-17T17:41:08.895Z] 
+[2026-11-17T17:41:08.895Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s 
+[2026-11-17T17:41:09.182Z] Waiting for deployment "arithmetic-app" rollout to finish: 1 out of 2 new replicas have been updated...
+[2026-11-17T17:41:17.298Z] Waiting for deployment "arithmetic-app" rollout to finish: 1 out of 2 new replicas have been updated...
+[2026-11-17T17:41:17.298Z] Waiting for deployment "arithmetic-app" rollout to finish: 1 out of 2 new replicas have been updated...
+[2026-11-17T17:41:17.298Z] Waiting for deployment "arithmetic-app" rollout to finish: 1 old replicas are pending termination...
+[2026-11-17T17:41:17.298Z] Waiting for deployment "arithmetic-app" rollout to finish: 1 old replicas are pending termination...
+[2026-11-17T17:41:23.852Z] Waiting for deployment "arithmetic-app" rollout to finish: 1 old replicas are pending termination...
+[2026-11-17T17:41:23.852Z] deployment "arithmetic-app" successfully rolled out
+[2026-11-17T17:41:23.852Z] 
+[2026-11-17T17:41:23.852Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>kubectl -n arithmetic get pods -o wide 
+[2026-11-17T17:41:23.852Z] NAME                              READY   STATUS        RESTARTS   AGE     IP            NODE                           NOMINATED NODE   READINESS GATES
+[2026-11-17T17:41:23.852Z] arithmetic-app-69c4775ddc-97qvb   1/1     Running       0          8s      10.244.0.14   arithmetic-lab-control-plane   <none>           <none>
+[2026-11-17T17:41:23.852Z] arithmetic-app-69c4775ddc-nqspr   1/1     Running       0          15s     10.244.0.13   arithmetic-lab-control-plane   <none>           <none>
+[2026-11-17T17:41:23.852Z] arithmetic-app-6d547c7878-scqzs   1/1     Terminating   0          3m25s   10.244.0.11   arithmetic-lab-control-plane   <none>           <none>
+[2026-11-17T17:41:23.852Z] arithmetic-app-c4d8b6495-lfr8f    1/1     Terminating   0          15s     10.244.0.12   arithmetic-lab-control-plane   <none>           <none>
+[2026-11-17T17:41:23.852Z] 
+[2026-11-17T17:41:23.852Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>kubectl -n arithmetic get service arithmetic-service 
+[2026-11-17T17:41:23.852Z] NAME                 TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+[2026-11-17T17:41:23.852Z] arithmetic-service   NodePort   10.96.99.132   <none>        80:30081/TCP   25m
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Smoke test)
+[Pipeline] bat
+[2026-11-17T17:41:24.259Z] 
+[2026-11-17T17:41:24.260Z] E:\devOps project\lab_external\.jenkins\home\workspace\Arithmetic-Operations>powershell -NoProfile -ExecutionPolicy Bypass -File scripts\smoke-test.ps1 -BaseUrl http://localhost:30081 
+[2026-11-17T17:41:24.522Z] ==> Checking health at http://localhost:30081/api/health
+[2026-11-17T17:41:27.078Z]     status=ok instance=arithmetic-app-69c4775ddc-nqspr node=arithmetic-lab-control-plane
+[2026-11-17T17:41:27.078Z]     PASS 128 + 64 = 192 [arithmetic-app-69c4775ddc-nqspr]
+[2026-11-17T17:41:27.078Z]     PASS 128 - 64 = 64 [arithmetic-app-69c4775ddc-nqspr]
+[2026-11-17T17:41:27.078Z]     PASS 12 * 8 = 96 [arithmetic-app-69c4775ddc-nqspr]
+[2026-11-17T17:41:27.078Z]     PASS 144 / 12 = 12 [arithmetic-app-69c4775ddc-nqspr]
+[2026-11-17T17:41:27.078Z] ==> Smoke test passed: 4 operations + health + history
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+[2026-11-17T17:41:27.452Z] Archiving artifacts
+[Pipeline] deleteDir
+[Pipeline] echo
+[2026-11-17T17:41:27.758Z] Deployed arithmetic-ops:build-2 to kind cluster arithmetic-lab. Open http://localhost:30081
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

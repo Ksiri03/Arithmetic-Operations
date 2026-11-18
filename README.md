@@ -143,6 +143,13 @@ Jenkins requirements on Windows:
 
 Create a **Pipeline** job pointing at this repository, branch `*/main`, script path `Jenkinsfile`, then click **Build Now**. See [docs/JENKINS.md](docs/JENKINS.md) for the manual freestyle configuration required by the lab record.
 
+## Lab record and demonstration
+
+- [Lab write-up (HTML)](docs/lab-writeup.html) – the formatted record with aim, procedure, commands, outputs and screenshots.
+- [Lab write-up (PDF)](docs/lab-writeup.pdf) – printable A4 copy.
+- [Demonstration runbook](docs/DEMO.md) – an 8–10 minute sequence for the faculty external, with viva questions and recovery steps.
+- [Jenkins configuration](docs/JENKINS.md) – the declarative pipeline plus the manual Freestyle equivalent.
+
 ## Notes
 
 - The service keeps the last 12 calculations **per replica** in memory. That is intentional: it makes the pod name in the UI meaningful when Kubernetes load-balances requests.
