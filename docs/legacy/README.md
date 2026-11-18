@@ -1,14 +1,18 @@
-# Legacy lab write-up — version 1
+# Legacy version - advanced UI
 
-This is the original editorial-style lab record, kept as a backup.
+This folder preserves the original editorial-style version of the project.
 
-- [`lab-writeup-v1.html`](lab-writeup-v1.html) — the original HTML version.
-- [`lab-writeup-v1.pdf`](lab-writeup-v1.pdf) — the original printable PDF.
+Contents:
 
-The HTML uses the shared `../screenshots/` and `../fonts/` folders, so it can be opened directly from this directory.
+- `lab-writeup-v1.html` - the original lab record.
+- `lab-writeup-v1.pdf` - the original printable PDF.
+- `screenshots/` - the screenshots used by that record.
+- `jenkins-build-2-console.txt` - the original Jenkins build log.
 
-The same version is also available from Git:
+The HTML uses the runnable legacy frontend in [`../../legacy/ui-v1/`](../../legacy/ui-v1/), including its fonts. Open the HTML directly or use the Git tag:
 
 ```powershell
 git checkout legacy-ui-v1
 ```
+
+The current version of the project is the simple calculator in the repository root and in [`../lab-writeup.html`](../lab-writeup.html).

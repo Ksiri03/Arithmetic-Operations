@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -11,35 +11,35 @@
 ------------------------------------------------------------------- */
 @font-face {
   font-family: "Newsreader";
-  src: url("../fonts/newsreader-var.woff2") format("woff2");
+  src: url("../../legacy/ui-v1/fonts/newsreader-var.woff2") format("woff2");
   font-weight: 300 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Newsreader";
-  src: url("../fonts/newsreader-italic-var.woff2") format("woff2");
+  src: url("../../legacy/ui-v1/fonts/newsreader-italic-var.woff2") format("woff2");
   font-weight: 300 500;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: "Archivo";
-  src: url("../fonts/archivo-var.woff2") format("woff2");
+  src: url("../../legacy/ui-v1/fonts/archivo-var.woff2") format("woff2");
   font-weight: 400 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "IBM Plex Mono";
-  src: url("../fonts/plex-mono-400.woff2") format("woff2");
+  src: url("../../legacy/ui-v1/fonts/plex-mono-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "IBM Plex Mono";
-  src: url("../fonts/plex-mono-500.woff2") format("woff2");
+  src: url("../../legacy/ui-v1/fonts/plex-mono-500.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -1174,7 +1174,7 @@ PASS  operation aliases work for the API
         </div>
         <p>Open <span class="mono">http://localhost:8080</span>. The service prints its instance name and health URL at startup. The UI starts with <span class="mono">128 + 64</span>; every calculation is sent to the Java API.</p>
         <figure class="shot">
-          <img src="../screenshots/app-home.png" alt="Arithmetic Operations console running locally in Docker, showing the four operations, a clean tape and the runtime panel.">
+          <img src="screenshots/app-home.png" alt="Arithmetic Operations console running locally in Docker, showing the four operations, a clean tape and the runtime panel.">
           <figcaption><span class="cap-title">Local run â€” Docker on port 8081</span><span>Figure 01</span></figcaption>
         </figure>
       </div>
@@ -1229,7 +1229,7 @@ origin  https://github.com/Ksiri03/Arithmetic-Operations.git (push)
         <h3>Verify the repository</h3>
         <p>Open the repository in a browser. The source folders, <span class="mono">Dockerfile</span>, <span class="mono">Jenkinsfile</span>, Kubernetes manifests and documentation should all be present.</p>
         <figure class="shot">
-          <img src="../screenshots/github-repo.png" alt="Public GitHub repository Ksiri03/Arithmetic-Operations with source folders, Dockerfile, Jenkinsfile and README.">
+          <img src="screenshots/github-repo.png" alt="Public GitHub repository Ksiri03/Arithmetic-Operations with source folders, Dockerfile, Jenkinsfile and README.">
           <figcaption><span class="cap-title">Public repository â€” two commits on main</span><span>Figure 02</span></figcaption>
         </figure>
       </div>
@@ -1380,7 +1380,7 @@ arithmetic-ops   1.0.0   af7ec66b6b77   287MB
           <li>Save and click <strong>Build Now</strong>.</li>
         </ol>
         <figure class="shot">
-          <img src="../screenshots/jenkins-job.png" alt="Jenkins job Arithmetic-Operations showing build 2 successful, artifact and permalinks.">
+          <img src="screenshots/jenkins-job.png" alt="Jenkins job Arithmetic-Operations showing build 2 successful, artifact and permalinks.">
           <figcaption><span class="cap-title">Jenkins job â€” two successful builds</span><span>Figure 03</span></figcaption>
         </figure>
       </div>
@@ -1456,11 +1456,11 @@ stage('Smoke test') {
         <h3>Execute the Jenkins job</h3>
         <p>Click <strong>Build Now</strong> and open the new build â†’ <strong>Console Output</strong>. Build <strong>#2</strong> completed in 1 minute 1 second.</p>
         <figure class="shot">
-          <img src="../screenshots/jenkins-build.png" alt="Jenkins build number 2 succeeded, with revision 61c88e1, artifact and duration.">
+          <img src="screenshots/jenkins-build.png" alt="Jenkins build number 2 succeeded, with revision 61c88e1, artifact and duration.">
           <figcaption><span class="cap-title">Build #2 â€” finished successfully</span><span>Figure 04</span></figcaption>
         </figure>
         <figure class="shot">
-          <img src="../screenshots/jenkins-console-tests.png" alt="Jenkins console showing compile and test stage with 11 tests passed and the start of the Docker image build.">
+          <img src="screenshots/jenkins-console-tests.png" alt="Jenkins console showing compile and test stage with 11 tests passed and the start of the Docker image build.">
           <figcaption><span class="cap-title">Console â€” 11 tests passed, Docker build begins</span><span>Figure 05</span></figcaption>
         </figure>
         <div class="block term">
@@ -1669,7 +1669,7 @@ service/arithmetic-service   NodePort   10.96.99.132  80:30081/TCP   34m</code><
         <h3>Open the live application and run the smoke test</h3>
         <p>Open <span class="mono">http://localhost:30081</span>. The Runtime card shows a real pod name and the node reported by the Downward API. Perform the four operations and verify the tape.</p>
         <figure class="shot">
-          <img src="../screenshots/app-k8s-fold.png" alt="Arithmetic Operations running in Kubernetes, with divide selected, four results on the tape and the runtime replica and node visible.">
+          <img src="screenshots/app-k8s-fold.png" alt="Arithmetic Operations running in Kubernetes, with divide selected, four results on the tape and the runtime replica and node visible.">
           <figcaption><span class="cap-title">Live in Kubernetes â€” replica and node visible</span><span>Figure 06</span></figcaption>
         </figure>
         <div class="block term">
@@ -1801,22 +1801,22 @@ deployment "arithmetic-app" successfully rolled out</code></pre>
 
     <div class="gallery">
       <figure class="shot wide">
-        <img src="../screenshots/app-k8s.png" alt="Full Arithmetic Operations page served by Kubernetes: four operations on the tape, result 12, replica arithmetic-app-67d9cd46b5-hmfr4 and node arithmetic-lab-control-plane.">
+        <img src="screenshots/app-k8s.png" alt="Full Arithmetic Operations page served by Kubernetes: four operations on the tape, result 12, replica arithmetic-app-67d9cd46b5-hmfr4 and node arithmetic-lab-control-plane.">
         <figcaption><span class="cap-title">Live service â€” four operations, clean tape, Kubernetes runtime</span><span>Figure 07 Â· localhost:30081</span></figcaption>
       </figure>
 
       <figure class="shot wide">
-        <img src="../screenshots/jenkins-console-success.png" alt="Jenkins console for build 2 showing four PASS smoke tests, the deployment message and Finished: SUCCESS.">
+        <img src="screenshots/jenkins-console-success.png" alt="Jenkins console for build 2 showing four PASS smoke tests, the deployment message and Finished: SUCCESS.">
         <figcaption><span class="cap-title">Jenkins build #2 â€” four smoke checks and successful completion</span><span>Figure 08</span></figcaption>
       </figure>
 
       <figure class="shot">
-        <img src="../screenshots/jenkins-dashboard.png" alt="Jenkins dashboard showing the Arithmetic-Operations job with a successful build 2.">
+        <img src="screenshots/jenkins-dashboard.png" alt="Jenkins dashboard showing the Arithmetic-Operations job with a successful build 2.">
         <figcaption><span class="cap-title">Jenkins dashboard</span><span>Figure 09</span></figcaption>
       </figure>
 
       <figure class="shot">
-        <img src="../screenshots/jenkins-job.png" alt="Jenkins job page for Arithmetic-Operations with build 2 successful and the archived arithmetic-ops.jar.">
+        <img src="screenshots/jenkins-job.png" alt="Jenkins job page for Arithmetic-Operations with build 2 successful and the archived arithmetic-ops.jar.">
         <figcaption><span class="cap-title">Job page and build history</span><span>Figure 10</span></figcaption>
       </figure>
     </div>
@@ -1943,10 +1943,10 @@ kubectl -n arithmetic get pods -o wide</code></pre>
           <tr><td class="mono">Jenkinsfile</td><td>Six-stage CI/CD pipeline with smoke test</td></tr>
           <tr><td class="mono">k8s/deployment.yaml</td><td>Two replicas, probes, resources and security context</td></tr>
           <tr><td class="mono">k8s/service.yaml</td><td>NodePort 30081 exposing the application</td></tr>
-          <tr><td class="mono">docs/jenkins-build-2-console.txt</td><td>Complete Jenkins build #2 console log</td></tr>
+          <tr><td class="mono">jenkins-build-2-console.txt</td><td>Complete Jenkins build #2 console log</td></tr>
           <tr><td class="mono">docs/JENKINS.md</td><td>Pipeline and manual Freestyle configuration</td></tr>
           <tr><td class="mono">docs/DEMO.md</td><td>Ten-minute faculty demonstration runbook</td></tr>
-          <tr><td class="mono">docs/screenshots/</td><td>GitHub, Jenkins and live Kubernetes captures</td></tr>
+          <tr><td class="mono">screenshots/</td><td>GitHub, Jenkins and live Kubernetes captures</td></tr>
         </tbody>
       </table>
     </div>
