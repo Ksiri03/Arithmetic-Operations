@@ -2,7 +2,7 @@
 
 A precise, dependency-free Java calculator for addition, subtraction, multiplication and division. Built for **DevOps Lab 04** and delivered end to end with **Git → Jenkins → Docker → Kubernetes**.
 
-![Arithmetic Operations calculator](docs/screenshots/app-home-simple.png)
+![Arithmetic Operations calculator](docs/screenshots/app-home.png)
 
 > The current interface is deliberately simple and student-friendly. The earlier editorial-style UI is preserved in [`legacy/ui-v1/`](legacy/ui-v1/) and on the Git tag `legacy-ui-v1`.
 

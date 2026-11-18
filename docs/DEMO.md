@@ -60,7 +60,7 @@ $env:Path = "$env:JAVA_HOME\bin;" + $env:Path
 Sign in with `admin` / `arithmetic04`. If the application pods do not recover, run:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\deploy-kind.ps1 -ImageTag build-4
+powershell -ExecutionPolicy Bypass -File scripts\deploy-kind.ps1 -ImageTag build-5
 ```
 
 ---

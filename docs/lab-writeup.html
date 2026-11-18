@@ -680,8 +680,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]</code></pre>
       <div class="output">
         <span class="label">Output</span>
         <pre>REPOSITORY        TAG       IMAGE ID       CREATED         SIZE
-arithmetic-ops    1.0.0     18a3fd71277e   10 minutes ago  286MB
-arithmetic-ops    build-4   18a3fd71277e   10 minutes ago  286MB</pre>
+arithmetic-ops    1.0.0     2f3b91651612   10 minutes ago  286MB</pre>
       </div>
     </article>
 
@@ -695,7 +694,7 @@ arithmetic-ops    build-4   18a3fd71277e   10 minutes ago  286MB</pre>
         <span class="label">Output</span>
         <pre>{"a":"144","b":"12","operation":"divide","label":"Division",
  "symbol":"÷","result":"12","expression":"144 ÷ 12 = 12",
- "servedBy":"da25aa959d70"}</pre>
+ "servedBy":"c38654f2ec9c"}</pre>
       </div>
       <p>The same image answers correctly outside Kubernetes. The only difference in the cluster is that Kubernetes supplies the pod name and node name.</p>
     </article>
@@ -760,30 +759,30 @@ arithmetic-ops    build-4   18a3fd71277e   10 minutes ago  286MB</pre>
 
     <article class="step">
       <h3>Step 16 — Execute the Jenkins job</h3>
-      <p>Open the job and click <b>Build Now</b>. Open the new build and select <b>Console Output</b>. Build 4 completed successfully; the relevant lines are:</p>
+      <p>Open the job and click <b>Build Now</b>. Open the new build and select <b>Console Output</b>. Build 5 completed successfully; the relevant lines are:</p>
       <div class="output">
         <span class="label">Console output</span>
         <pre>11 passed, 0 failed
 ==&gt; All tests passed
 ...
-#16 naming to docker.io/library/arithmetic-ops:build-4 done
-image=sha256:18a3fd71277e05dd36e60f4bd747a959f336f53a8b874234356f4e3aabef2b21 size=74234564
+#18 naming to docker.io/library/arithmetic-ops:build-5 done
+image=sha256:2f3b91651612dc66b1c4f35d4e4c3a5d06e91ddc5cfcc47ec424cd752ec5ec36 size=74234564
 ...
 deployment.apps/arithmetic-app image updated
 deployment "arithmetic-app" successfully rolled out
 ...
 ==&gt; Checking health at http://localhost:30081/api/health
-    status=ok instance=arithmetic-app-559cc85f99-wcv8d node=arithmetic-lab-control-plane
-    PASS 128 + 64 = 192 [arithmetic-app-559cc85f99-wcv8d]
-    PASS 128 - 64 = 64 [arithmetic-app-559cc85f99-wcv8d]
-    PASS 12 * 8 = 96 [arithmetic-app-559cc85f99-wcv8d]
-    PASS 144 / 12 = 12 [arithmetic-app-559cc85f99-wcv8d]
+    status=ok instance=arithmetic-app-867d9cccdd-qs6pz node=arithmetic-lab-control-plane
+    PASS 128 + 64 = 192 [arithmetic-app-867d9cccdd-qs6pz]
+    PASS 128 - 64 = 64 [arithmetic-app-867d9cccdd-qs6pz]
+    PASS 12 * 8 = 96 [arithmetic-app-867d9cccdd-qs6pz]
+    PASS 144 / 12 = 12 [arithmetic-app-867d9cccdd-qs6pz]
 ==&gt; Smoke test passed: 4 operations + health + history
 Finished: SUCCESS</pre>
       </div>
       <p>Output screens 3 to 6 show the Jenkins dashboard, build summary, test stage and final success screen.</p>
       <div class="note">
-        <strong>Troubleshooting note.</strong> Build 3 failed at the first smoke-test health request because the NodePort briefly had no ready endpoint during the rolling update. The health request now retries for up to 48 seconds. Build 4 then completed successfully. This is a normal Kubernetes rollout timing issue, not a calculation error.
+        <strong>Troubleshooting note.</strong> One rehearsal build hit the first smoke-test health request because the NodePort briefly had no ready endpoint during the rolling update. The health request now retries for up to 48 seconds. The recorded build completed successfully. This is a normal Kubernetes rollout timing issue, not a calculation error.
       </div>
     </article>
 
@@ -792,9 +791,9 @@ Finished: SUCCESS</pre>
       <p>The Jenkins pipeline performs these Kubernetes commands automatically. They can also be run manually to create the cluster or recover the deployment:</p>
       <span class="label">Command</span>
       <pre><code>&gt; kind create cluster --name arithmetic-lab --config k8s\kind-config.yaml
-&gt; kind load docker-image arithmetic-ops:build-4 --name arithmetic-lab
+&gt; kind load docker-image arithmetic-ops:build-5 --name arithmetic-lab
 &gt; kubectl apply -k k8s
-&gt; kubectl -n arithmetic set image deployment/arithmetic-app app=arithmetic-ops:build-4
+&gt; kubectl -n arithmetic set image deployment/arithmetic-app app=arithmetic-ops:build-5
 &gt; kubectl -n arithmetic rollout status deployment/arithmetic-app</code></pre>
       <div class="output">
         <span class="label">Output</span>
@@ -812,17 +811,17 @@ deployment "arithmetic-app" successfully rolled out</pre>
       <div class="output">
         <span class="label">Output</span>
         <pre>NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/arithmetic-app   2/2     2            2           11h
+deployment.apps/arithmetic-app   2/2     2            2           12h
 
-NAME                                 READY   STATUS    RESTARTS   AGE
-pod/arithmetic-app-ddf7b7747-fhsj2   1/1     Running   0          3m
-pod/arithmetic-app-ddf7b7747-7rkwd   1/1     Running   0          3m
+NAME                                  READY   STATUS    RESTARTS   AGE
+pod/arithmetic-app-64f68c9b74-4f6hb   1/1     Running   0          2m
+pod/arithmetic-app-64f68c9b74-mlg8v   1/1     Running   0          2m
 
 NAME                         TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)
 service/arithmetic-service   NodePort   10.96.99.132   &lt;none&gt;        80:30081/TCP
 
 {"status":"ok","service":"arithmetic-operations","version":"1.0.0",
- "instance":"arithmetic-app-ddf7b7747-fhsj2",
+ "instance":"arithmetic-app-64f68c9b74-mlg8v",
  "node":"arithmetic-lab-control-plane","javaVersion":"21.0.13",
  "checks":{"application":"UP","arithmeticCore":"UP"}}</pre>
       </div>
@@ -835,41 +834,41 @@ service/arithmetic-service   NodePort   10.96.99.132   &lt;none&gt;        80:30
   ============================================================= -->
   <section class="outputs" id="outputs">
     <h2>Output screens</h2>
-    <p class="lead">The screenshots below were captured from the running application, the public GitHub repository and Jenkins build 4.</p>
+    <p class="lead">The screenshots below were captured from the running application, the public GitHub repository and Jenkins build 5.</p>
 
     <figure>
-      <img src="screenshots/app-home-simple.png" alt="Simple arithmetic calculator running locally with four operations in the recent calculations list.">
+      <img src="screenshots/app-home.png" alt="Simple arithmetic calculator running locally with four operations in the recent calculations list.">
       <figcaption><b>Output screen 1.</b> The Java calculator running locally on port 8081. The four operations were calculated and added to the recent list.</figcaption>
     </figure>
 
     <figure>
-      <img src="screenshots/github-repo-v2.png" alt="Public GitHub repository showing the source folders, Dockerfile, Jenkinsfile, Kubernetes manifests and README.">
+      <img src="screenshots/github-repo.png" alt="Public GitHub repository showing the source folders, Dockerfile, Jenkinsfile, Kubernetes manifests and README.">
       <figcaption><b>Output screen 2.</b> The public GitHub repository after the source code and deployment files were pushed.</figcaption>
     </figure>
 
     <div class="shot-grid">
       <figure>
-        <img src="screenshots/jenkins-dashboard-v2.png" alt="Jenkins dashboard showing the Arithmetic-Operations job and successful build 4.">
+        <img src="screenshots/jenkins-dashboard.png" alt="Jenkins dashboard showing the Arithmetic-Operations job and successful build 5.">
         <figcaption><b>Output screen 3.</b> Jenkins dashboard with the successful build.</figcaption>
       </figure>
       <figure>
-        <img src="screenshots/jenkins-build-v2.png" alt="Jenkins build 4 summary with the archived jar and Git revision.">
-        <figcaption><b>Output screen 4.</b> Jenkins build 4 summary.</figcaption>
+        <img src="screenshots/jenkins-build.png" alt="Jenkins build 5 summary with the archived jar and Git revision.">
+        <figcaption><b>Output screen 4.</b> Jenkins build 5 summary.</figcaption>
       </figure>
     </div>
 
     <figure>
-      <img src="screenshots/jenkins-console-tests-v2.png" alt="Jenkins console output showing the compile and test stage with all 11 tests passed.">
+      <img src="screenshots/jenkins-console-tests.png" alt="Jenkins console output showing the compile and test stage with all 11 tests passed.">
       <figcaption><b>Output screen 5.</b> The compile and test stage: 11 passed, 0 failed, followed by the Docker image build.</figcaption>
     </figure>
 
     <figure>
-      <img src="screenshots/jenkins-console-success-v2.png" alt="Jenkins console output showing four smoke-test PASS lines and Finished: SUCCESS.">
+      <img src="screenshots/jenkins-console-success.png" alt="Jenkins console output showing four smoke-test PASS lines and Finished: SUCCESS.">
       <figcaption><b>Output screen 6.</b> The smoke-test stage with four live API checks and the final <code>Finished: SUCCESS</code>.</figcaption>
     </figure>
 
     <figure>
-      <img src="screenshots/app-k8s-simple.png" alt="Arithmetic calculator served by Kubernetes, with the pod name and node visible in the Server panel.">
+      <img src="screenshots/app-k8s.png" alt="Arithmetic calculator served by Kubernetes, with the pod name and node visible in the Server panel.">
       <figcaption><b>Output screen 7.</b> The same application served by Kubernetes on port 30081. The Server panel shows the pod that answered the request and the kind node.</figcaption>
     </figure>
   </section>
@@ -894,7 +893,7 @@ service/arithmetic-service   NodePort   10.96.99.132   &lt;none&gt;        80:30
 
   <section class="result-box" id="result">
     <h2>Result</h2>
-    <p>The Java program performs addition, subtraction, multiplication and division and is available in the public GitHub repository. Jenkins build 4 cloned the repository, passed all 11 unit tests, built the Docker image, loaded it into the kind cluster, updated the Kubernetes Deployment and passed all four live smoke checks. The application is running with two replicas at <code>http://localhost:30081</code>.</p>
+    <p>The Java program performs addition, subtraction, multiplication and division and is available in the public GitHub repository. Jenkins build 5 cloned the repository, passed all 11 unit tests, built the Docker image, loaded it into the kind cluster, updated the Kubernetes Deployment and passed all four live smoke checks. The application is running with two replicas at <code>http://localhost:30081</code>.</p>
   </section>
 
   <footer class="doc-footer">
