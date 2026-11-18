@@ -34,6 +34,35 @@ Expected:
 
 If anything is down, use the recovery section at the end **before** calling the faculty.
 
+### If the machine was restarted
+
+Start Docker Desktop first, then bring the kind node back if it is stopped:
+
+```powershell
+docker start arithmetic-lab-control-plane
+kubectl -n arithmetic rollout status deployment/arithmetic-app --timeout=180s
+```
+
+Start Jenkins in a **separate PowerShell window** and leave the window open:
+
+```powershell
+$env:JENKINS_HOME = "E:\devOps project\lab_external\.jenkins\home"
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-25"
+$env:Path = "$env:JAVA_HOME\bin;" + $env:Path
+
+& "$env:JAVA_HOME\bin\java.exe" `
+  '-Djava.io.tmpdir=E:\devOps project\lab_external\.jenkins\tmp' `
+  -Djenkins.install.runSetupWizard=false `
+  -jar 'E:\devOps project\lab_external\.jenkins\jenkins.war' `
+  --httpPort=8080
+```
+
+Sign in with `admin` / `arithmetic04`. If the application pods do not recover, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\deploy-kind.ps1 -ImageTag build-2
+```
+
 ---
 
 ## 1. Opening – what was built (60 seconds)
