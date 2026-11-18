@@ -31,6 +31,7 @@ Arithmetic-Operations/
 ├── scripts/                          build, test, run, deploy, smoke test
 ├── docs/                             demo runbook, Jenkins notes, screenshots
 ├── Dockerfile
+├── compose.yaml                      one-command local Docker run
 ├── Jenkinsfile
 └── README.md
 ```
@@ -86,12 +87,34 @@ Example response:
 
 ## Docker
 
+The container listens on port `8080`. Port `8080` on this machine is already used by Jenkins, so publish the container on host port `8082`.
+
+The included Compose file does this for you:
+
 ```powershell
-docker build -t arithmetic-ops:1.0.0 .
-docker run --rm -p 8082:8080 arithmetic-ops:1.0.0
+docker compose up -d --build
 ```
 
-Open <http://localhost:8082>.
+Open <http://localhost:8082>. Stop it with:
+
+```powershell
+docker compose down
+```
+
+Without Compose, use an explicit port mapping:
+
+```powershell
+docker build -t arithmetic-ops:1.0.0 .
+docker run --rm -d --name arithmetic-demo -p 8082:8080 arithmetic-ops:1.0.0
+```
+
+Open <http://localhost:8082>. Stop it with:
+
+```powershell
+docker rm -f arithmetic-demo
+```
+
+> **Important:** in Docker Desktop, a container that shows only `8080/tcp` has no published host port and cannot be opened from the browser. Set the optional host port to `8082`, or start it with `-p 8082:8080` as shown above.
 
 ## Kubernetes with kind
 

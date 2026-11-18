@@ -1,0 +1,16 @@
+services:
+  arithmetic-ops:
+    image: arithmetic-ops:latest
+    build:
+      context: .
+    container_name: arithmetic-demo
+    ports:
+      - "8082:8080"
+    environment:
+      PORT: "8080"
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
