@@ -3,164 +3,113 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A precise arithmetic operations console built with Java, shipped with Docker, and served by Kubernetes.">
-  <meta name="theme-color" content="#f1efe9">
-  <title>Arithmetic — Operations Console</title>
+  <meta name="description" content="A simple arithmetic calculator for addition, subtraction, multiplication and division. Built with Java, Docker and Kubernetes.">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Arithmetic Operations</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-
-  <header class="masthead">
-    <a class="wordmark" href="/" aria-label="Arithmetic home">
-      <span class="wordmark__mark" aria-hidden="true">A</span>
-      <span>Arithmetic</span>
-    </a>
-    <p class="masthead__meta">Lab 04 <span>/</span> Java · Docker · Kubernetes</p>
-    <div class="status" id="status" title="Service health">
-      <span class="status__dot" aria-hidden="true"></span>
-      <span id="statusText">Connecting</span>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="/" aria-label="Arithmetic Operations home">
+        <span class="brand-mark" aria-hidden="true">=</span>
+        <span class="brand-text">
+          <strong>Arithmetic Operations</strong>
+          <small>DevOps Lab · Question 4</small>
+        </span>
+      </a>
+      <div class="status" id="status" title="Service status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="statusText">Connecting...</span>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero__title">
-        <p class="eyebrow">Experiment 04 — Arithmetic operations</p>
-        <h1>Numbers,<br><em>resolved.</em></h1>
-      </div>
-      <div class="hero__aside">
-        <p class="hero__lede">A small, exact calculator for the four operations. The interface is static; every answer is computed by a Java service, containerised, and served by Kubernetes.</p>
-        <dl class="hero__meta">
-          <div><dt>Runtime</dt><dd>Java 17+</dd></div>
-          <div><dt>Delivery</dt><dd>Docker → K8s</dd></div>
-          <div><dt>Pipeline</dt><dd>Jenkins</dd></div>
-        </dl>
-      </div>
-    </section>
+  <main class="shell page">
+    <div class="intro">
+      <h1>Simple calculator</h1>
+      <p>Enter two numbers, choose an operation, and calculate. The answer is computed by the Java server.</p>
+    </div>
 
-    <section class="workspace" aria-label="Arithmetic calculator">
-      <div class="calculator">
-        <div class="calculator__top">
-          <span class="label">Operation</span>
-          <div class="operations" role="group" aria-label="Choose an operation">
-            <button type="button" class="operation is-active" data-op="add" aria-pressed="true"><span class="operation__index">01</span><span class="operation__symbol">+</span><span class="operation__name">Add</span></button>
-            <button type="button" class="operation" data-op="subtract" aria-pressed="false"><span class="operation__index">02</span><span class="operation__symbol">−</span><span class="operation__name">Subtract</span></button>
-            <button type="button" class="operation" data-op="multiply" aria-pressed="false"><span class="operation__index">03</span><span class="operation__symbol">×</span><span class="operation__name">Multiply</span></button>
-            <button type="button" class="operation" data-op="divide" aria-pressed="false"><span class="operation__index">04</span><span class="operation__symbol">÷</span><span class="operation__name">Divide</span></button>
-          </div>
+    <div class="layout">
+      <section class="card calculator-card" aria-labelledby="calculator-title">
+        <div class="card-head">
+          <h2 id="calculator-title">Calculate</h2>
+          <span class="badge">4 operations</span>
         </div>
 
         <form id="calcForm" novalidate>
+          <fieldset class="operations">
+            <legend>Operation</legend>
+            <button type="button" class="operation is-active" data-op="add" aria-pressed="true"><span>+</span> Addition</button>
+            <button type="button" class="operation" data-op="subtract" aria-pressed="false"><span>−</span> Subtraction</button>
+            <button type="button" class="operation" data-op="multiply" aria-pressed="false"><span>×</span> Multiplication</button>
+            <button type="button" class="operation" data-op="divide" aria-pressed="false"><span>÷</span> Division</button>
+          </fieldset>
+
           <div class="operands">
             <label class="field" for="a">
-              <span class="field__label"><span>A</span> First operand</span>
-              <input id="a" name="a" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="128" placeholder="0" aria-describedby="message">
+              <span>First number</span>
+              <input id="a" name="a" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="128" placeholder="0">
             </label>
-            <div class="operator" id="operator" aria-hidden="true">+</div>
+            <span class="operator" id="operatorSymbol" aria-hidden="true">+</span>
             <label class="field" for="b">
-              <span class="field__label"><span>B</span> Second operand</span>
-              <input id="b" name="b" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="64" placeholder="0" aria-describedby="message">
+              <span>Second number</span>
+              <input id="b" name="b" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="64" placeholder="0">
             </label>
           </div>
 
-          <div class="result" aria-live="polite">
-            <div class="result__head">
-              <span class="label">Result</span>
-              <span class="result__expression" id="expression">128 + 64</span>
-            </div>
-            <div class="result__row">
-              <output class="result__value" id="result" for="a b">—</output>
-              <span class="result__unit" id="resultUnit">answer</span>
+          <div class="result-box" aria-live="polite">
+            <div class="result-label">Result</div>
+            <div class="result-line">
+              <output class="result-value" id="result" for="a b">—</output>
+              <span class="result-expression" id="expression">128 + 64</span>
             </div>
           </div>
 
-          <div class="calculator__actions">
-            <button type="submit" class="button button--primary" id="calculateButton">
-              <span>Calculate</span>
-              <span class="button__arrow" aria-hidden="true">→</span>
-            </button>
-            <button type="button" class="button button--ghost" id="clearButton">Clear</button>
-            <button type="button" class="button button--ghost" id="copyButton">Copy result</button>
-            <p class="hint" id="message">Press <kbd>Enter</kbd> to evaluate. Answers are computed on the server.</p>
+          <p class="message" id="message">Press Calculate to evaluate.</p>
+
+          <div class="actions">
+            <button type="submit" class="button button-primary" id="calculateButton">Calculate</button>
+            <button type="button" class="button button-secondary" id="clearButton">Clear</button>
           </div>
         </form>
+      </section>
 
-        <div class="calculator__foot">
-          <span class="mono">POST /api/calculate</span>
-          <span class="mono" id="servedBy">served by —</span>
-        </div>
-      </div>
-
-      <aside class="sidebar" aria-label="Calculation context">
-        <section class="panel">
-          <div class="panel__head">
-            <h2>Tape</h2>
-            <span class="label" id="historyCount">Last 12</span>
+      <aside class="side">
+        <section class="card" aria-labelledby="history-title">
+          <div class="card-head">
+            <h2 id="history-title">Recent calculations</h2>
+            <span class="badge" id="historyCount">0</span>
           </div>
-          <ol class="tape" id="history">
-            <li class="tape__empty">No calculations yet.<br>The last twelve will appear here.</li>
-          </ol>
+          <ul class="history" id="history">
+            <li class="history-empty">No calculations yet.</li>
+          </ul>
         </section>
 
-        <section class="panel panel--dark runtime">
-          <div class="panel__head">
-            <h2>Runtime</h2>
-            <span class="runtime__live"><span class="status__dot" aria-hidden="true"></span> Live</span>
+        <section class="card" aria-labelledby="server-title">
+          <div class="card-head">
+            <h2 id="server-title">Server</h2>
+            <span class="badge badge-green" id="serverStatus">Online</span>
           </div>
-          <dl class="runtime__grid">
+          <dl class="server-list">
             <div><dt>Replica</dt><dd id="podName">—</dd></div>
             <div><dt>Node</dt><dd id="nodeName">—</dd></div>
             <div><dt>Version</dt><dd id="version">—</dd></div>
             <div><dt>Uptime</dt><dd id="uptime">—</dd></div>
           </dl>
-          <div class="runtime__checks">
-            <div><span class="check check--up" aria-hidden="true"></span> API <span>UP</span></div>
-            <div><span class="check check--up" aria-hidden="true"></span> Arithmetic core <span>UP</span></div>
-          </div>
+          <p class="server-note">The replica name comes from the Kubernetes pod that answered the request.</p>
         </section>
       </aside>
-    </section>
-
-    <section class="pipeline" aria-label="Delivery pipeline">
-      <div class="pipeline__intro">
-        <p class="eyebrow">Under the hood</p>
-        <h2>One binary.<br>Two replicas.<br><em>Every time.</em></h2>
-      </div>
-      <ol class="pipeline__steps">
-        <li>
-          <span class="pipeline__number">01</span>
-          <div>
-            <h3>Build</h3>
-            <p>Jenkins compiles the Java sources and runs the dependency-free test suite.</p>
-            <code>javac → java -cp build/classes</code>
-          </div>
-        </li>
-        <li>
-          <span class="pipeline__number">02</span>
-          <div>
-            <h3>Ship</h3>
-            <p>A multi-stage Docker build produces a small, non-root runtime image.</p>
-            <code>docker build -t arithmetic-ops:1.0.0 .</code>
-          </div>
-        </li>
-        <li>
-          <span class="pipeline__number">03</span>
-          <div>
-            <h3>Run</h3>
-            <p>Kubernetes rolls the image across two healthy pods behind a NodePort service.</p>
-            <code>kubectl rollout status deploy/arithmetic-app</code>
-          </div>
-        </li>
-      </ol>
-    </section>
+    </div>
   </main>
 
   <footer class="footer">
-    <p>Arithmetic Operations <span class="footer__sep">/</span> Lab 04</p>
-    <p class="mono">GET <a href="/api/health">/api/health</a> · <a href="/api/history">/api/history</a></p>
-    <p>Java · Jenkins · Docker · Kubernetes</p>
+    <div class="shell footer-inner">
+      <span>Arithmetic Operations · DevOps Lab</span>
+      <span>Java · Jenkins · Docker · Kubernetes</span>
+    </div>
   </footer>
 
   <script src="/app.js"></script>

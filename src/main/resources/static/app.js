@@ -12,40 +12,37 @@
     operation: "add",
     busy: false,
     lastResult: null,
-    history: [],
   };
 
   const els = {
     form: document.getElementById("calcForm"),
     a: document.getElementById("a"),
     b: document.getElementById("b"),
-    operator: document.getElementById("operator"),
+    operator: document.getElementById("operatorSymbol"),
     result: document.getElementById("result"),
     expression: document.getElementById("expression"),
-    resultUnit: document.getElementById("resultUnit"),
     message: document.getElementById("message"),
-    button: document.getElementById("calculateButton"),
-    buttonLabel: document.querySelector("#calculateButton span:first-child"),
+    calculate: document.getElementById("calculateButton"),
     clear: document.getElementById("clearButton"),
-    copy: document.getElementById("copyButton"),
     history: document.getElementById("history"),
     historyCount: document.getElementById("historyCount"),
-    servedBy: document.getElementById("servedBy"),
     status: document.getElementById("status"),
     statusText: document.getElementById("statusText"),
+    serverStatus: document.getElementById("serverStatus"),
     podName: document.getElementById("podName"),
     nodeName: document.getElementById("nodeName"),
     version: document.getElementById("version"),
     uptime: document.getElementById("uptime"),
   };
 
-  const defaultMessage = "Press Enter to evaluate. Answers are computed on the server.";
+  const defaultMessage = "Press Calculate to evaluate.";
 
-  function formatGrouped(value) {
+  function formatNumber(value) {
     if (value === null || value === undefined) return "—";
-    const negative = String(value).startsWith("-");
-    const raw = negative ? String(value).slice(1) : String(value);
-    if (/[eE]/.test(raw)) return (negative ? "−" : "") + raw;
+    const text = String(value);
+    if (/[eE]/.test(text)) return text.replace("-", "−");
+    const negative = text.startsWith("-");
+    const raw = negative ? text.slice(1) : text;
     const [integer, fraction] = raw.split(".");
     const grouped = (integer || "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return (negative ? "−" : "") + grouped + (fraction ? "." + fraction : "");
@@ -64,7 +61,7 @@
     els.message.classList.toggle("is-error", Boolean(isError));
   }
 
-  function updatePreview() {
+  function updateExpression() {
     const a = els.a.value.trim();
     const b = els.b.value.trim();
     const symbol = SYMBOLS[state.operation];
@@ -80,60 +77,47 @@
       button.setAttribute("aria-pressed", String(active));
     });
     els.operator.textContent = SYMBOLS[operation];
-    els.operator.classList.remove("is-switching");
-    void els.operator.offsetWidth;
-    els.operator.classList.add("is-switching");
-    window.setTimeout(() => els.operator.classList.remove("is-switching"), 260);
-    updatePreview();
+    updateExpression();
   }
 
-  function markInvalid() {
-    els.a.closest(".field").classList.toggle("is-invalid", !els.a.value.trim());
-    els.b.closest(".field").classList.toggle("is-invalid", !els.b.value.trim());
-  }
-
-  function animateResult() {
-    els.result.classList.remove("is-settled");
-    void els.result.offsetWidth;
-    els.result.classList.add("is-settled");
+  function clearInvalid() {
+    els.a.classList.remove("is-invalid");
+    els.b.classList.remove("is-invalid");
   }
 
   function showResult(value, expression) {
+    els.result.textContent = formatNumber(value);
     els.result.classList.remove("is-error");
-    els.result.textContent = formatGrouped(value);
     els.expression.textContent = expression || "";
-    els.resultUnit.textContent = "answer";
-    animateResult();
+    state.lastResult = value;
   }
 
-  function showError(message) {
-    els.result.classList.remove("is-error");
-    els.result.textContent = "Not defined";
+  function showError(text) {
+    els.result.textContent = "Error";
     els.result.classList.add("is-error");
-    els.resultUnit.textContent = "check input";
-    els.message.textContent = message;
-    els.message.classList.add("is-error");
-    animateResult();
+    els.expression.textContent = "";
+    setMessage(text, true);
   }
 
-  async function calculate(options = {}) {
+  async function calculate() {
     if (state.busy) return;
+
     const a = els.a.value.trim();
     const b = els.b.value.trim();
+    clearInvalid();
 
-    markInvalid();
     if (!a || !b) {
-      setMessage("Enter both operands before calculating.", true);
-      els.a.closest(".field").classList.toggle("is-invalid", !a);
-      els.b.closest(".field").classList.toggle("is-invalid", !b);
+      if (!a) els.a.classList.add("is-invalid");
+      if (!b) els.b.classList.add("is-invalid");
+      setMessage("Please enter both numbers.", true);
       (!a ? els.a : els.b).focus();
       return;
     }
 
     state.busy = true;
-    els.button.disabled = true;
-    els.buttonLabel.textContent = "Calculating";
-    setMessage("Sending to the Java service…");
+    els.calculate.disabled = true;
+    els.calculate.textContent = "Calculating...";
+    setMessage("Sending request to the Java server...");
 
     try {
       const response = await fetch("/api/calculate", {
@@ -150,59 +134,53 @@
         return;
       }
 
-      state.lastResult = payload.result;
       showResult(payload.result, payload.expression);
-      els.servedBy.textContent = "served by " + payload.servedBy;
-      els.podName.textContent = payload.servedBy;
-      setMessage(options.silent ? defaultMessage : "Calculated on " + payload.servedBy + ".");
+      els.podName.textContent = payload.servedBy || "—";
+      setMessage("Calculated on " + payload.servedBy + ".");
       await loadHistory();
     } catch (error) {
-      showError("The service is unreachable. Check the pod and try again.");
+      showError("The server is unreachable. Check the pod and try again.");
     } finally {
       state.busy = false;
-      els.button.disabled = false;
-      els.buttonLabel.textContent = "Calculate";
+      els.calculate.disabled = false;
+      els.calculate.textContent = "Calculate";
     }
   }
 
   function renderHistory(items) {
-    state.history = items;
     els.history.replaceChildren();
-    els.historyCount.textContent = "Last 12";
+    els.historyCount.textContent = String(items.length);
 
     if (!items.length) {
       const empty = document.createElement("li");
-      empty.className = "tape__empty";
-      empty.textContent = "No calculations yet. The last twelve will appear here.";
+      empty.className = "history-empty";
+      empty.textContent = "No calculations yet.";
       els.history.append(empty);
       return;
     }
 
-    items.forEach((item, index) => {
+    items.forEach((item) => {
       const li = document.createElement("li");
       const button = document.createElement("button");
       button.type = "button";
-      button.className = "tape__item";
+      button.className = "history-item";
       button.title = "Load this calculation";
 
-      const number = document.createElement("span");
-      number.className = "tape__index";
-      number.textContent = String(index + 1).padStart(2, "0");
-
       const expression = document.createElement("span");
-      expression.className = "tape__expression";
+      expression.className = "history-expression";
       expression.textContent = item.expression;
 
       const time = document.createElement("span");
-      time.className = "tape__time";
+      time.className = "history-time";
       time.textContent = new Date(item.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-      button.append(number, expression, time);
+      button.append(expression, time);
       button.addEventListener("click", () => {
         els.a.value = item.a;
         els.b.value = item.b;
         setOperation(item.operation);
-        calculate();
+        showResult(item.result, item.expression);
+        setMessage("Loaded from recent calculations.");
       });
 
       li.append(button);
@@ -213,14 +191,11 @@
   async function loadHistory() {
     try {
       const response = await fetch("/api/history", { cache: "no-store" });
-      if (!response.ok) return [];
+      if (!response.ok) return;
       const payload = await response.json();
-      const items = Array.isArray(payload.items) ? payload.items : [];
-      renderHistory(items);
-      return items;
+      renderHistory(Array.isArray(payload.items) ? payload.items : []);
     } catch (error) {
-      // The calculator remains usable even if history is unavailable.
-      return [];
+      // The calculator stays usable when history is temporarily unavailable.
     }
   }
 
@@ -229,16 +204,23 @@
       const response = await fetch("/api/health", { cache: "no-store" });
       if (!response.ok) throw new Error("offline");
       const health = await response.json();
-      els.status.classList.remove("is-down");
-      els.statusText.textContent = "Live";
+
+      els.status.classList.remove("is-offline");
+      els.status.classList.add("is-online");
+      els.statusText.textContent = "Online";
+      els.serverStatus.className = "badge badge-green";
+      els.serverStatus.textContent = "Online";
+
       els.podName.textContent = health.instance || "unknown";
       els.nodeName.textContent = health.node || "unknown";
       els.version.textContent = "v" + (health.version || "—");
       els.uptime.textContent = formatUptime(health.uptimeSeconds);
-      els.servedBy.textContent = "served by " + (health.instance || "unknown");
     } catch (error) {
-      els.status.classList.add("is-down");
+      els.status.classList.remove("is-online");
+      els.status.classList.add("is-offline");
       els.statusText.textContent = "Offline";
+      els.serverStatus.className = "badge badge-red";
+      els.serverStatus.textContent = "Offline";
       els.podName.textContent = "unreachable";
       els.nodeName.textContent = "—";
       els.version.textContent = "—";
@@ -250,28 +232,12 @@
     els.a.value = "";
     els.b.value = "";
     els.result.textContent = "—";
-    els.result.classList.remove("is-error", "is-settled");
-    els.resultUnit.textContent = "answer";
+    els.result.classList.remove("is-error");
     state.lastResult = null;
-    els.a.closest(".field").classList.remove("is-invalid");
-    els.b.closest(".field").classList.remove("is-invalid");
+    clearInvalid();
+    updateExpression();
     setMessage(defaultMessage);
-    updatePreview();
     els.a.focus();
-  }
-
-  async function copyResult() {
-    if (state.lastResult === null) {
-      setMessage("Calculate something first.", true);
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(state.lastResult);
-      els.copy.textContent = "Copied";
-      window.setTimeout(() => { els.copy.textContent = "Copy result"; }, 1400);
-    } catch (error) {
-      setMessage("Clipboard access is unavailable in this browser.", true);
-    }
   }
 
   document.querySelectorAll(".operation").forEach((button) => {
@@ -285,31 +251,18 @@
 
   [els.a, els.b].forEach((input) => {
     input.addEventListener("input", () => {
-      input.closest(".field").classList.remove("is-invalid");
-      updatePreview();
+      input.classList.remove("is-invalid");
+      updateExpression();
     });
   });
 
   els.clear.addEventListener("click", clearForm);
-  els.copy.addEventListener("click", copyResult);
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") clearForm();
   });
 
   loadHealth();
-  loadHistory().then((items) => {
-    if (!items.length) {
-      calculate({ silent: true });
-      return;
-    }
-    const latest = items[0];
-    els.a.value = latest.a;
-    els.b.value = latest.b;
-    state.lastResult = latest.result;
-    setOperation(latest.operation);
-    showResult(latest.result, latest.expression);
-    setMessage(defaultMessage);
-  });
+  loadHistory();
   window.setInterval(loadHealth, 20000);
 })();
